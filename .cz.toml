@@ -1,0 +1,27 @@
+[tool.commitizen]
+version_scheme = "semver"
+version_provider = "scm"
+tag_format = "v$version"
+update_changelog_on_bump = true
+
+major_version_zero = true
+
+name = "cz_conventional_commits"
+change_type_order = [
+  "Features",
+  "Bug Fixes",
+  "Refactors",
+  "Build System Changes",
+  "Performance Enhancements",
+  "Documentation Enhancements",
+  "CI Changes",
+]
+
+[tool.commitizen.change_type_map]
+feat = "Features"
+fix = "Bug Fixes"
+refactor = "Refactors"
+build = "Build System Changes"
+perf = "Performance Enhancements"
+docs = "Documentation Enhancements"
+ci = "CI Changes"
