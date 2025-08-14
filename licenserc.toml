@@ -5,7 +5,7 @@ inlineHeader = "Copyright © 2025 Colden Cullen"
 excludes = ["*.lock", "*.sum"]
 
 [mapping.DOUBLESLASH_STYLE]
-extensions = ["cue"]
+extensions = ["go", "cue"]
 
 [mapping.SCRIPT_STYLE]
 extensions = ["nix"]
