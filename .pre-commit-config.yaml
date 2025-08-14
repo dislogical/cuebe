@@ -41,3 +41,12 @@ repos:
     rev: v6.1.1
     hooks:
       - id: hawkeye-format
+
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: master
+    hooks:
+      - id: go-fmt
+      - id: go-imports
+      - id: go-vet
+      - id: go-mod-tidy
+      - id: go-build
