@@ -1,3 +1,5 @@
+# Copyright © 2025 Colden Cullen
+
 [tool.commitizen]
 version_scheme = "semver"
 version_provider = "scm"

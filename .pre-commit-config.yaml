@@ -1,3 +1,5 @@
+# Copyright © 2025 Colden Cullen
+
 default_install_hook_types:
   - pre-commit
   - pre-push
@@ -34,3 +36,8 @@ repos:
     rev: v4.8.3
     hooks:
       - id: commitizen
+
+  - repo: https://github.com/korandoru/hawkeye
+    rev: v6.1.1
+    hooks:
+      - id: hawkeye-format

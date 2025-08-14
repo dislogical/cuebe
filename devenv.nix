@@ -1,3 +1,5 @@
+# Copyright © 2025 Colden Cullen
+
 { pkgs, lib, config, inputs, ... }:
 
 {
@@ -6,6 +8,7 @@
     git
     pre-commit
     commitizen
+    hawkeye
   ];
 
   languages = {
