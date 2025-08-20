@@ -1,0 +1,38 @@
+// Copyright © 2025 Colden Cullen
+// SPDX-License-Identifier: MIT
+
+edition = "2023";
+package backend.plugin.proto;
+
+import "google/protobuf/go_features.proto";
+import "google/protobuf/struct.proto";
+
+option features.(pb.go).api_level = API_OPAQUE;
+option features.field_presence = EXPLICIT;
+option go_package = "github.com/dislogical/cuebe/backend/plugin/proto";
+
+message ConfigurePluginRequest {}
+
+message ConfigurePluginResponse {
+  message BackendDescription {
+    repeated string outputs = 1;
+  }
+
+  map<string, BackendDescription> backends = 1;
+}
+
+message PerformTaskRequest {
+  string backend = 1;
+
+  repeated string inputs = 2;
+  google.protobuf.Value parameters = 3;
+  string out_directory = 4;
+}
+
+message PerformTaskResponse {}
+
+service CuebePluginService {
+  rpc ConfigurePlugin(ConfigurePluginRequest) returns (ConfigurePluginResponse);
+
+  rpc PerformTask(PerformTaskRequest) returns (PerformTaskResponse);
+}
