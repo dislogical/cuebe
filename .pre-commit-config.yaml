@@ -42,3 +42,30 @@ repos:
     rev: v6.1.1
     hooks:
       - id: hawkeye-format
+
+  - repo: local
+    hooks:
+      - id: go-fmt
+        name: go format
+        language: system
+        entry: go fmt
+        types: [go]
+        pass_filenames: false
+      - id: go-vet
+        name: go vet
+        language: system
+        entry: go vet
+        types: [go]
+        pass_filenames: false
+
+      - id: cue-fmt
+        name: cue format
+        language: system
+        entry: cue fmt
+        types: [cue]
+      - id: cue-vet
+        name: cue vet
+        language: system
+        entry: cue vet -c
+        types: [cue, yaml]
+        pass_filenames: false
