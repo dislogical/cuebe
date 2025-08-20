@@ -15,6 +15,7 @@
 
   languages = {
     go.enable = true;
+    go.enableHardeningWorkaround = true;
     cue.enable = true;
   };
 
