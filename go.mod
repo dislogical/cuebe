@@ -14,7 +14,7 @@ require (
 	github.com/dislogical/cuebe/pkg/backend/plugin v0.0.0-20250820230449-5f3b3902453a
 	github.com/hashicorp/go-plugin v1.7.0
 	google.golang.org/grpc v1.74.2
-	google.golang.org/protobuf v1.36.7
+	google.golang.org/protobuf v1.36.8
 )
 
 require (
