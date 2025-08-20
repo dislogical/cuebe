@@ -7,7 +7,7 @@ go 1.24.5
 
 replace github.com/dislogical/cuebe/pkg/backend/plugin => ../../../pkg/backend/plugin
 
-require github.com/dislogical/cuebe/pkg/backend/plugin v0.0.0-00010101000000-000000000000
+require github.com/dislogical/cuebe/pkg/backend/plugin v0.0.0-20250820230449-5f3b3902453a
 
 require (
 	cuelang.org/go v0.14.1 // indirect
