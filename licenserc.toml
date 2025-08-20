@@ -1,11 +1,15 @@
 # Copyright © 2025 Colden Cullen
+# SPDX-License-Identifier: MIT
 
-inlineHeader = "Copyright © 2025 Colden Cullen"
+inlineHeader = """
+Copyright © 2025 Colden Cullen
+SPDX-License-Identifier: MIT \
+"""
 
 excludes = ["*.lock", "*.sum"]
 
 [mapping.DOUBLESLASH_STYLE]
-extensions = ["go", "cue"]
+extensions = ["go", "cue", "proto"]
 
 [mapping.SCRIPT_STYLE]
 extensions = ["nix"]
