@@ -12,7 +12,7 @@ replace (
 
 require (
 	cuelang.org/go v0.14.1
-	github.com/dislogical/cuebe v0.0.0-20250814211555-0ae42a8c734f
+	github.com/dislogical/cuebe v0.0.0-20250820224914-e2e8382b7787
 	github.com/pterm/pterm v0.12.81
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
