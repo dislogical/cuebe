@@ -10,5 +10,9 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
     }
+  },
+  "gopls": {
+    "build.expandWorkspaceToModule": true,
+    "formatting.local": "github.com/dislogical/cuebe"
   }
 }
