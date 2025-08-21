@@ -26,4 +26,5 @@ var docsCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(docsCmd)
+	rootCmd.CompletionOptions.DisableDefaultCmd = true
 }
