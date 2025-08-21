@@ -1,6 +1,8 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
+//go:build docs
+
 package main
 
 import (
