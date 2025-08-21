@@ -11,6 +11,9 @@
     commitizen
     hawkeye
     cobra-cli
+    mkdocs
+    mike
+    python313Packages.mkdocs-material
   ];
 
   languages = {

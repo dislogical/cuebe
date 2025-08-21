@@ -1,0 +1,31 @@
+# Copyright © 2025 Colden Cullen
+# SPDX-License-Identifier: MIT
+
+site_name: Cuebe
+site_url: https://coldencullen.com/cuebe/
+repo_url: https://github.com/dislogical/cuebe
+
+theme:
+  name: material
+
+plugins:
+  - mike:
+      canonical_version: latest
+      version_selector: true
+
+extra:
+  version:
+    provider: mike
+    alias: true
+
+markdown_extensions:
+  - markdown.extensions.tables
+  - pymdownx.inlinehilite
+  - sane_lists
+
+strict: true
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
