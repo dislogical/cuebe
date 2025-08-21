@@ -8,7 +8,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/dislogical/cuebe/pkg/backend/plugin"
+	plugin "github.com/dislogical/cuebe/api/go"
 
 	"sigs.k8s.io/kustomize/api/konfig"
 	"sigs.k8s.io/kustomize/api/krusty"

@@ -15,7 +15,7 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	"github.com/dislogical/cuebe/pkg/backend/plugin/proto"
+	protov1 "github.com/dislogical/cuebe/api/go/proto/cuebe/v1"
 )
 
 var cuectx = cuecontext.New()
@@ -94,7 +94,7 @@ type cuebePluginServer struct {
 }
 
 func (p *cuebePluginServer) GRPCServer(broker *goplugin.GRPCBroker, s *grpc.Server) error {
-	proto.RegisterCuebePluginServiceServer(s, &grpcServer{
+	protov1.RegisterCuebePluginServiceServer(s, &grpcServer{
 		decodeCodec: gocodec.New(cuectx, &gocodec.Config{}),
 		backends:    p.backends,
 	})
@@ -103,19 +103,19 @@ func (p *cuebePluginServer) GRPCServer(broker *goplugin.GRPCBroker, s *grpc.Serv
 
 // Here is the gRPC server that GRPCClient talks to.
 type grpcServer struct {
-	proto.UnimplementedCuebePluginServiceServer
+	protov1.UnimplementedCuebePluginServiceServer
 
 	decodeCodec *gocodec.Codec
 	backends    map[string]cuebeBackend
 }
 
-func (s *grpcServer) ConfigurePlugin(ctx context.Context, req *proto.ConfigurePluginRequest) (*proto.ConfigurePluginResponse, error) {
-	respBuilder := proto.ConfigurePluginResponse_builder{
-		Backends: make(map[string]*proto.ConfigurePluginResponse_BackendDescription, len(s.backends)),
+func (s *grpcServer) ConfigurePlugin(ctx context.Context, req *protov1.ConfigurePluginRequest) (*protov1.ConfigurePluginResponse, error) {
+	respBuilder := protov1.ConfigurePluginResponse_builder{
+		Backends: make(map[string]*protov1.ConfigurePluginResponse_BackendDescription, len(s.backends)),
 	}
 
 	for name, backend := range s.backends {
-		respBuilder.Backends[name] = proto.ConfigurePluginResponse_BackendDescription_builder{
+		respBuilder.Backends[name] = protov1.ConfigurePluginResponse_BackendDescription_builder{
 			Outputs: backend.Outputs,
 		}.Build()
 	}
@@ -123,7 +123,7 @@ func (s *grpcServer) ConfigurePlugin(ctx context.Context, req *proto.ConfigurePl
 	return respBuilder.Build(), nil
 }
 
-func (s *grpcServer) PerformTask(ctx context.Context, req *proto.PerformTaskRequest) (*proto.PerformTaskResponse, error) {
+func (s *grpcServer) PerformTask(ctx context.Context, req *protov1.PerformTaskRequest) (*protov1.PerformTaskResponse, error) {
 	backend, ok := s.backends[req.GetBackend()]
 	if !ok {
 		return nil, fmt.Errorf("backend %s is not registered to this plugin", req.GetBackend())
@@ -150,5 +150,5 @@ func (s *grpcServer) PerformTask(ctx context.Context, req *proto.PerformTaskRequ
 		return nil, err
 	}
 
-	return proto.PerformTaskResponse_builder{}.Build(), nil
+	return protov1.PerformTaskResponse_builder{}.Build(), nil
 }

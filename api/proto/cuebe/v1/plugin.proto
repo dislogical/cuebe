@@ -2,14 +2,11 @@
 // SPDX-License-Identifier: MIT
 
 edition = "2023";
-package backend.plugin.proto;
+package cuebe.v1;
 
-import "google/protobuf/go_features.proto";
 import "google/protobuf/struct.proto";
 
-option features.(pb.go).api_level = API_OPAQUE;
 option features.field_presence = EXPLICIT;
-option go_package = "github.com/dislogical/cuebe/backend/plugin/proto";
 
 message ConfigurePluginRequest {}
 

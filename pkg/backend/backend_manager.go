@@ -1,7 +1,7 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-package manager
+package backend
 
 import (
 	"context"
@@ -18,14 +18,14 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	"github.com/dislogical/cuebe/pkg/backend/plugin"
-	"github.com/dislogical/cuebe/pkg/backend/plugin/proto"
+	plugin "github.com/dislogical/cuebe/api/go"
+	protov1 "github.com/dislogical/cuebe/api/go/proto/cuebe/v1"
 	"github.com/dislogical/cuebe/pkg/task"
 )
 
 type Backend struct {
-	client     proto.CuebePluginServiceClient
-	descriptor *proto.ConfigurePluginResponse_BackendDescription
+	client     protov1.CuebePluginServiceClient
+	descriptor *protov1.ConfigurePluginResponse_BackendDescription
 	outputs    []string
 }
 
@@ -67,9 +67,9 @@ func (bm *BackendManager) Start() {
 			os.Exit(1)
 		}
 
-		cuebeClient := cuebePlugin.(proto.CuebePluginServiceClient)
+		cuebeClient := cuebePlugin.(protov1.CuebePluginServiceClient)
 
-		resp, err := cuebeClient.ConfigurePlugin(context.TODO(), &proto.ConfigurePluginRequest{})
+		resp, err := cuebeClient.ConfigurePlugin(context.TODO(), &protov1.ConfigurePluginRequest{})
 		if err != nil {
 			slog.Error("Failed to describe plugin backends", "error", err)
 		}
@@ -112,7 +112,7 @@ func (bm *BackendManager) SendTask(t task.Task) error {
 		}
 	}
 
-	taskReqBuilder := proto.PerformTaskRequest_builder{
+	taskReqBuilder := protov1.PerformTaskRequest_builder{
 		Backend:      &backendName,
 		Inputs:       t.Inputs,
 		Parameters:   &structpb.Value{},
@@ -150,5 +150,5 @@ type cuebePluginClient struct {
 }
 
 func (p *cuebePluginClient) GRPCClient(ctx context.Context, broker *goplugin.GRPCBroker, c *grpc.ClientConn) (interface{}, error) {
-	return proto.NewCuebePluginServiceClient(c), nil
+	return protov1.NewCuebePluginServiceClient(c), nil
 }
