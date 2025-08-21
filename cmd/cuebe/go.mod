@@ -12,7 +12,7 @@ replace (
 
 require (
 	cuelang.org/go v0.14.1
-	github.com/dislogical/cuebe v0.0.0-20250820234814-43cd8ae383f0
+	github.com/dislogical/cuebe v0.0.0-20250821003620-10462e19fa78
 	github.com/pterm/pterm v0.12.81
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
@@ -25,7 +25,7 @@ require (
 	cuelabs.dev/go/oci/ociregistry v0.0.0-20250722084951-074d06050084 // indirect
 	github.com/cockroachdb/apd/v3 v3.2.1 // indirect
 	github.com/containerd/console v1.0.5 // indirect
-	github.com/dislogical/cuebe/pkg/backend/plugin v0.0.0-20250820230449-5f3b3902453a // indirect
+	github.com/dislogical/cuebe/pkg/backend/plugin v0.0.0-20250820234814-43cd8ae383f0 // indirect
 	github.com/emicklei/proto v1.14.2 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
