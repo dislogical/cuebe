@@ -1,8 +1,0 @@
-go 1.24.5
-
-use (
-	.
-	./cmd/cuebe
-	./plugins/k8s/kustomize
-	./plugins/test
-)

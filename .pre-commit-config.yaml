@@ -48,13 +48,13 @@ repos:
       - id: go-fmt
         name: go format
         language: system
-        entry: go fmt
+        entry: go fmt ./...
         types: [go]
         pass_filenames: false
       - id: go-vet
         name: go vet
         language: system
-        entry: go vet
+        entry: go vet ./...
         types: [go]
         pass_filenames: false
 
