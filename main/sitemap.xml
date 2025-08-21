@@ -12,24 +12,4 @@
          <loc>https://coldencullen.com/cuebe/latest/cmd/cuebe_build/</loc>
          <lastmod>2025-08-21</lastmod>
     </url>
-    <url>
-         <loc>https://coldencullen.com/cuebe/latest/cmd/cuebe_completion/</loc>
-         <lastmod>2025-08-21</lastmod>
-    </url>
-    <url>
-         <loc>https://coldencullen.com/cuebe/latest/cmd/cuebe_completion_bash/</loc>
-         <lastmod>2025-08-21</lastmod>
-    </url>
-    <url>
-         <loc>https://coldencullen.com/cuebe/latest/cmd/cuebe_completion_fish/</loc>
-         <lastmod>2025-08-21</lastmod>
-    </url>
-    <url>
-         <loc>https://coldencullen.com/cuebe/latest/cmd/cuebe_completion_powershell/</loc>
-         <lastmod>2025-08-21</lastmod>
-    </url>
-    <url>
-         <loc>https://coldencullen.com/cuebe/latest/cmd/cuebe_completion_zsh/</loc>
-         <lastmod>2025-08-21</lastmod>
-    </url>
 </urlset>
