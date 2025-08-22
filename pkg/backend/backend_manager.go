@@ -18,13 +18,13 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	plugin "github.com/dislogical/cuebe/api/go"
-	protov1 "github.com/dislogical/cuebe/api/go/proto/cuebe/v1"
-	"github.com/dislogical/cuebe/pkg/task"
+	plugin "github.com/dislogical/bonk/api/go"
+	protov1 "github.com/dislogical/bonk/api/go/proto/bonk/v1"
+	"github.com/dislogical/bonk/pkg/task"
 )
 
 type Backend struct {
-	client     protov1.CuebePluginServiceClient
+	client     protov1.BonkPluginServiceClient
 	descriptor *protov1.ConfigurePluginResponse_BackendDescription
 	outputs    []string
 }
@@ -46,7 +46,7 @@ func (bm *BackendManager) Start() {
 		client := goplugin.NewClient(&goplugin.ClientConfig{
 			HandshakeConfig: plugin.Handshake,
 			Plugins: map[string]goplugin.Plugin{
-				plugin.PluginType: &cuebePluginClient{},
+				plugin.PluginType: &bonkPluginClient{},
 			},
 			Cmd:     exec.Command("go", "run", pluginPath),
 			Managed: true,
@@ -61,15 +61,15 @@ func (bm *BackendManager) Start() {
 			os.Exit(1)
 		}
 
-		cuebePlugin, err := rpc.Dispense(plugin.PluginType)
+		bonkPlugin, err := rpc.Dispense(plugin.PluginType)
 		if err != nil {
-			slog.Error("Failed to dispense cuebe plugin", "error", err)
+			slog.Error("Failed to dispense bonk plugin", "error", err)
 			os.Exit(1)
 		}
 
-		cuebeClient := cuebePlugin.(protov1.CuebePluginServiceClient)
+		bonkClient := bonkPlugin.(protov1.BonkPluginServiceClient)
 
-		resp, err := cuebeClient.ConfigurePlugin(context.TODO(), &protov1.ConfigurePluginRequest{})
+		resp, err := bonkClient.ConfigurePlugin(context.TODO(), &protov1.ConfigurePluginRequest{})
 		if err != nil {
 			slog.Error("Failed to describe plugin backends", "error", err)
 		}
@@ -82,7 +82,7 @@ func (bm *BackendManager) Start() {
 			}
 
 			bm.plugins[pluginPath][name] = Backend{
-				client:     cuebeClient,
+				client:     bonkClient,
 				descriptor: backendDesc,
 				outputs:    backendDesc.GetOutputs(),
 			}
@@ -144,11 +144,11 @@ func (bm *BackendManager) Shutdown() {
 
 // Plugin Client
 
-type cuebePluginClient struct {
+type bonkPluginClient struct {
 	goplugin.NetRPCUnsupportedPlugin
 	goplugin.GRPCPlugin
 }
 
-func (p *cuebePluginClient) GRPCClient(ctx context.Context, broker *goplugin.GRPCBroker, c *grpc.ClientConn) (interface{}, error) {
-	return protov1.NewCuebePluginServiceClient(c), nil
+func (p *bonkPluginClient) GRPCClient(ctx context.Context, broker *goplugin.GRPCBroker, c *grpc.ClientConn) (interface{}, error) {
+	return protov1.NewBonkPluginServiceClient(c), nil
 }

@@ -3,4 +3,4 @@
 
 format: github
 output: ./docs/api/go.md
-package: github.com/dislogical/cuebe/api/go
+package: github.com/dislogical/bonk/api/go

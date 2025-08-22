@@ -38,7 +38,7 @@ var buildCmd = &cobra.Command{
 		insts := load.Instances(args, &config)
 		values, err := cuectx.BuildInstances(insts)
 		if err != nil {
-			slog.Error("Failed to build cuebe project", "error", err.Error())
+			slog.Error("Failed to build bonk project", "error", err.Error())
 		}
 
 		// Unify all of the values into a single source of truth

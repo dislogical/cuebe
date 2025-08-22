@@ -6,7 +6,7 @@ package main
 import (
 	"log/slog"
 
-	plugin "github.com/dislogical/cuebe/api/go"
+	plugin "github.com/dislogical/bonk/api/go"
 )
 
 type Params struct {

@@ -1,9 +1,9 @@
 # Copyright © 2025 Colden Cullen
 # SPDX-License-Identifier: MIT
 
-site_name: Cuebe
-site_url: https://coldencullen.com/cuebe/
-repo_url: https://github.com/dislogical/cuebe
+site_name: Bonk
+site_url: https://coldencullen.com/bonk/
+repo_url: https://github.com/dislogical/bonk
 
 theme:
   name: material

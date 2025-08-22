@@ -54,4 +54,4 @@
 .devenv*
 devenv.local.nix
 
-.cuebe/
+.bonk/

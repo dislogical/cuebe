@@ -14,15 +14,15 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/dislogical/cuebe/pkg/backend"
-	"github.com/dislogical/cuebe/pkg/task"
+	"github.com/dislogical/bonk/pkg/backend"
+	"github.com/dislogical/bonk/pkg/task"
 )
 
 var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cuebe",
+	Use:   "bonk",
 	Short: "A cue-based configuration build system.",
 
 	Run: func(cmd *cobra.Command, args []string) {
@@ -61,22 +61,22 @@ var rootCmd = &cobra.Command{
 				"Kustomize",
 				"Test.Kustomize",
 				cuectx.BuildExpr(ast.NewStruct()),
-				path.Join(wd, ".cuebe/Test.Resources:Resources/resources.yaml"),
+				path.Join(wd, ".bonk/Test.Resources:Resources/resources.yaml"),
 			)),
 		)
 	},
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is .cuebe.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is .bonk.yaml)")
 
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Search config in current directory with name ".cuebe.yaml".
+		// Search config in current directory with name ".bonk.yaml".
 		viper.AddConfigPath(".")
-		viper.SetConfigName(".cuebe.yaml")
+		viper.SetConfigName(".bonk.yaml")
 	}
 
 	viper.AutomaticEnv()

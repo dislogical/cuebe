@@ -1,7 +1,7 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-module: "cuebe.build"
+module: "github.com/dislogical/bonk"
 language: {
 	version: "v0.14.1"
 }

@@ -17,7 +17,7 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	protov1 "github.com/dislogical/cuebe/api/go/proto/cuebe/v1"
+	protov1 "github.com/dislogical/bonk/api/go/proto/bonk/v1"
 )
 
 var cuectx = cuecontext.New()
@@ -30,7 +30,7 @@ type TaskParams[Params any] struct {
 }
 
 // Represents a backend capable of performing tasks
-type CuebeBackend struct {
+type BonkBackend struct {
 	Name         string
 	Outputs      []string
 	ParamsSchema cue.Value
@@ -38,7 +38,7 @@ type CuebeBackend struct {
 }
 
 // Factory to create a new task backend
-func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[Params]) error) CuebeBackend {
+func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[Params]) error) BonkBackend {
 	zero := new(Params)
 
 	schema := cuectx.EncodeType(*zero)
@@ -48,7 +48,7 @@ func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[
 
 	slog.Info("backend schema", "backend", name, "schema", schema)
 
-	return CuebeBackend{
+	return BonkBackend{
 		Name:         name,
 		Outputs:      outputs,
 		ParamsSchema: schema,
@@ -65,8 +65,8 @@ func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[
 }
 
 // Call from main() to start the plugin gRPC server
-func Serve(backends ...CuebeBackend) {
-	backendMap := make(map[string]CuebeBackend)
+func Serve(backends ...BonkBackend) {
+	backendMap := make(map[string]BonkBackend)
 	for _, backend := range backends {
 		backendMap[backend.Name] = backend
 	}
@@ -74,7 +74,7 @@ func Serve(backends ...CuebeBackend) {
 	goplugin.Serve(&goplugin.ServeConfig{
 		HandshakeConfig: Handshake,
 		Plugins: map[string]goplugin.Plugin{
-			PluginType: &cuebePluginServer{
+			PluginType: &bonkPluginServer{
 				backends: backendMap,
 			},
 		},
@@ -84,23 +84,23 @@ func Serve(backends ...CuebeBackend) {
 
 var Handshake = goplugin.HandshakeConfig{
 	ProtocolVersion:  1,
-	MagicCookieKey:   "CUEBE_PLUGIN",
+	MagicCookieKey:   "BONK_PLUGIN",
 	MagicCookieValue: "backend",
 }
 
-const PluginType = "cuebe"
+const PluginType = "bonk"
 
 // PRIVATE
 
-type cuebePluginServer struct {
+type bonkPluginServer struct {
 	goplugin.NetRPCUnsupportedPlugin
 	goplugin.GRPCPlugin
 
-	backends map[string]CuebeBackend
+	backends map[string]BonkBackend
 }
 
-func (p *cuebePluginServer) GRPCServer(broker *goplugin.GRPCBroker, s *grpc.Server) error {
-	protov1.RegisterCuebePluginServiceServer(s, &grpcServer{
+func (p *bonkPluginServer) GRPCServer(broker *goplugin.GRPCBroker, s *grpc.Server) error {
+	protov1.RegisterBonkPluginServiceServer(s, &grpcServer{
 		decodeCodec: gocodec.New(cuectx, &gocodec.Config{}),
 		backends:    p.backends,
 	})
@@ -109,10 +109,10 @@ func (p *cuebePluginServer) GRPCServer(broker *goplugin.GRPCBroker, s *grpc.Serv
 
 // Here is the gRPC server that GRPCClient talks to.
 type grpcServer struct {
-	protov1.UnimplementedCuebePluginServiceServer
+	protov1.UnimplementedBonkPluginServiceServer
 
 	decodeCodec *gocodec.Codec
-	backends    map[string]CuebeBackend
+	backends    map[string]BonkBackend
 }
 
 func (s *grpcServer) ConfigurePlugin(ctx context.Context, req *protov1.ConfigurePluginRequest) (*protov1.ConfigurePluginResponse, error) {

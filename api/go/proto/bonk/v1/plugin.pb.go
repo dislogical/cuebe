@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.8
 // 	protoc        (unknown)
-// source: cuebe/v1/plugin.proto
+// source: bonk/v1/plugin.proto
 
-package cuebev1
+package bonkv1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -29,7 +29,7 @@ type ConfigurePluginRequest struct {
 
 func (x *ConfigurePluginRequest) Reset() {
 	*x = ConfigurePluginRequest{}
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[0]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -41,7 +41,7 @@ func (x *ConfigurePluginRequest) String() string {
 func (*ConfigurePluginRequest) ProtoMessage() {}
 
 func (x *ConfigurePluginRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[0]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -73,7 +73,7 @@ type ConfigurePluginResponse struct {
 
 func (x *ConfigurePluginResponse) Reset() {
 	*x = ConfigurePluginResponse{}
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[1]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -85,7 +85,7 @@ func (x *ConfigurePluginResponse) String() string {
 func (*ConfigurePluginResponse) ProtoMessage() {}
 
 func (x *ConfigurePluginResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[1]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -135,7 +135,7 @@ type PerformTaskRequest struct {
 
 func (x *PerformTaskRequest) Reset() {
 	*x = PerformTaskRequest{}
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[2]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -147,7 +147,7 @@ func (x *PerformTaskRequest) String() string {
 func (*PerformTaskRequest) ProtoMessage() {}
 
 func (x *PerformTaskRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[2]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -279,7 +279,7 @@ type PerformTaskResponse struct {
 
 func (x *PerformTaskResponse) Reset() {
 	*x = PerformTaskResponse{}
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[3]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -291,7 +291,7 @@ func (x *PerformTaskResponse) String() string {
 func (*PerformTaskResponse) ProtoMessage() {}
 
 func (x *PerformTaskResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[3]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -323,7 +323,7 @@ type ConfigurePluginResponse_BackendDescription struct {
 
 func (x *ConfigurePluginResponse_BackendDescription) Reset() {
 	*x = ConfigurePluginResponse_BackendDescription{}
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[4]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -335,7 +335,7 @@ func (x *ConfigurePluginResponse_BackendDescription) String() string {
 func (*ConfigurePluginResponse_BackendDescription) ProtoMessage() {}
 
 func (x *ConfigurePluginResponse_BackendDescription) ProtoReflect() protoreflect.Message {
-	mi := &file_cuebe_v1_plugin_proto_msgTypes[4]
+	mi := &file_bonk_v1_plugin_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -371,19 +371,19 @@ func (b0 ConfigurePluginResponse_BackendDescription_builder) Build() *ConfigureP
 	return m0
 }
 
-var File_cuebe_v1_plugin_proto protoreflect.FileDescriptor
+var File_bonk_v1_plugin_proto protoreflect.FileDescriptor
 
-const file_cuebe_v1_plugin_proto_rawDesc = "" +
+const file_bonk_v1_plugin_proto_rawDesc = "" +
 	"\n" +
-	"\x15cuebe/v1/plugin.proto\x12\bcuebe.v1\x1a\x1cgoogle/protobuf/struct.proto\"\x18\n" +
-	"\x16ConfigurePluginRequest\"\x89\x02\n" +
-	"\x17ConfigurePluginResponse\x12K\n" +
-	"\bbackends\x18\x01 \x03(\v2/.cuebe.v1.ConfigurePluginResponse.BackendsEntryR\bbackends\x1a.\n" +
+	"\x14bonk/v1/plugin.proto\x12\abonk.v1\x1a\x1cgoogle/protobuf/struct.proto\"\x18\n" +
+	"\x16ConfigurePluginRequest\"\x87\x02\n" +
+	"\x17ConfigurePluginResponse\x12J\n" +
+	"\bbackends\x18\x01 \x03(\v2..bonk.v1.ConfigurePluginResponse.BackendsEntryR\bbackends\x1a.\n" +
 	"\x12BackendDescription\x12\x18\n" +
-	"\aoutputs\x18\x01 \x03(\tR\aoutputs\x1aq\n" +
+	"\aoutputs\x18\x01 \x03(\tR\aoutputs\x1ap\n" +
 	"\rBackendsEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12J\n" +
-	"\x05value\x18\x02 \x01(\v24.cuebe.v1.ConfigurePluginResponse.BackendDescriptionR\x05value:\x028\x01\"\xa3\x01\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12I\n" +
+	"\x05value\x18\x02 \x01(\v23.bonk.v1.ConfigurePluginResponse.BackendDescriptionR\x05value:\x028\x01\"\xa3\x01\n" +
 	"\x12PerformTaskRequest\x12\x18\n" +
 	"\abackend\x18\x01 \x01(\tR\abackend\x12\x16\n" +
 	"\x06inputs\x18\x02 \x03(\tR\x06inputs\x126\n" +
@@ -391,30 +391,30 @@ const file_cuebe_v1_plugin_proto_rawDesc = "" +
 	"parameters\x18\x03 \x01(\v2\x16.google.protobuf.ValueR\n" +
 	"parameters\x12#\n" +
 	"\rout_directory\x18\x04 \x01(\tR\foutDirectory\"\x15\n" +
-	"\x13PerformTaskResponse2\xb8\x01\n" +
-	"\x12CuebePluginService\x12V\n" +
-	"\x0fConfigurePlugin\x12 .cuebe.v1.ConfigurePluginRequest\x1a!.cuebe.v1.ConfigurePluginResponse\x12J\n" +
-	"\vPerformTask\x12\x1c.cuebe.v1.PerformTaskRequest\x1a\x1d.cuebe.v1.PerformTaskResponseB\x9c\x01\n" +
-	"\fcom.cuebe.v1B\vPluginProtoP\x01Z9github.com/dislogical/cuebe/api/go/proto/cuebe/v1;cuebev1\xa2\x02\x03CXX\xaa\x02\bCuebe.V1\xca\x02\bCuebe\\V1\xe2\x02\x14Cuebe\\V1\\GPBMetadata\xea\x02\tCuebe::V1\x92\x03\x02\b\x01b\beditionsp\xe8\a"
+	"\x13PerformTaskResponse2\xb3\x01\n" +
+	"\x11BonkPluginService\x12T\n" +
+	"\x0fConfigurePlugin\x12\x1f.bonk.v1.ConfigurePluginRequest\x1a .bonk.v1.ConfigurePluginResponse\x12H\n" +
+	"\vPerformTask\x12\x1b.bonk.v1.PerformTaskRequest\x1a\x1c.bonk.v1.PerformTaskResponseB\x94\x01\n" +
+	"\vcom.bonk.v1B\vPluginProtoP\x01Z6github.com/dislogical/bonk/api/go/proto/bonk/v1;bonkv1\xa2\x02\x03BXX\xaa\x02\aBonk.V1\xca\x02\aBonk\\V1\xe2\x02\x13Bonk\\V1\\GPBMetadata\xea\x02\bBonk::V1\x92\x03\x02\b\x01b\beditionsp\xe8\a"
 
-var file_cuebe_v1_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_cuebe_v1_plugin_proto_goTypes = []any{
-	(*ConfigurePluginRequest)(nil),                     // 0: cuebe.v1.ConfigurePluginRequest
-	(*ConfigurePluginResponse)(nil),                    // 1: cuebe.v1.ConfigurePluginResponse
-	(*PerformTaskRequest)(nil),                         // 2: cuebe.v1.PerformTaskRequest
-	(*PerformTaskResponse)(nil),                        // 3: cuebe.v1.PerformTaskResponse
-	(*ConfigurePluginResponse_BackendDescription)(nil), // 4: cuebe.v1.ConfigurePluginResponse.BackendDescription
-	nil,                    // 5: cuebe.v1.ConfigurePluginResponse.BackendsEntry
+var file_bonk_v1_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_bonk_v1_plugin_proto_goTypes = []any{
+	(*ConfigurePluginRequest)(nil),                     // 0: bonk.v1.ConfigurePluginRequest
+	(*ConfigurePluginResponse)(nil),                    // 1: bonk.v1.ConfigurePluginResponse
+	(*PerformTaskRequest)(nil),                         // 2: bonk.v1.PerformTaskRequest
+	(*PerformTaskResponse)(nil),                        // 3: bonk.v1.PerformTaskResponse
+	(*ConfigurePluginResponse_BackendDescription)(nil), // 4: bonk.v1.ConfigurePluginResponse.BackendDescription
+	nil,                    // 5: bonk.v1.ConfigurePluginResponse.BackendsEntry
 	(*structpb.Value)(nil), // 6: google.protobuf.Value
 }
-var file_cuebe_v1_plugin_proto_depIdxs = []int32{
-	5, // 0: cuebe.v1.ConfigurePluginResponse.backends:type_name -> cuebe.v1.ConfigurePluginResponse.BackendsEntry
-	6, // 1: cuebe.v1.PerformTaskRequest.parameters:type_name -> google.protobuf.Value
-	4, // 2: cuebe.v1.ConfigurePluginResponse.BackendsEntry.value:type_name -> cuebe.v1.ConfigurePluginResponse.BackendDescription
-	0, // 3: cuebe.v1.CuebePluginService.ConfigurePlugin:input_type -> cuebe.v1.ConfigurePluginRequest
-	2, // 4: cuebe.v1.CuebePluginService.PerformTask:input_type -> cuebe.v1.PerformTaskRequest
-	1, // 5: cuebe.v1.CuebePluginService.ConfigurePlugin:output_type -> cuebe.v1.ConfigurePluginResponse
-	3, // 6: cuebe.v1.CuebePluginService.PerformTask:output_type -> cuebe.v1.PerformTaskResponse
+var file_bonk_v1_plugin_proto_depIdxs = []int32{
+	5, // 0: bonk.v1.ConfigurePluginResponse.backends:type_name -> bonk.v1.ConfigurePluginResponse.BackendsEntry
+	6, // 1: bonk.v1.PerformTaskRequest.parameters:type_name -> google.protobuf.Value
+	4, // 2: bonk.v1.ConfigurePluginResponse.BackendsEntry.value:type_name -> bonk.v1.ConfigurePluginResponse.BackendDescription
+	0, // 3: bonk.v1.BonkPluginService.ConfigurePlugin:input_type -> bonk.v1.ConfigurePluginRequest
+	2, // 4: bonk.v1.BonkPluginService.PerformTask:input_type -> bonk.v1.PerformTaskRequest
+	1, // 5: bonk.v1.BonkPluginService.ConfigurePlugin:output_type -> bonk.v1.ConfigurePluginResponse
+	3, // 6: bonk.v1.BonkPluginService.PerformTask:output_type -> bonk.v1.PerformTaskResponse
 	5, // [5:7] is the sub-list for method output_type
 	3, // [3:5] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
@@ -422,26 +422,26 @@ var file_cuebe_v1_plugin_proto_depIdxs = []int32{
 	0, // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_cuebe_v1_plugin_proto_init() }
-func file_cuebe_v1_plugin_proto_init() {
-	if File_cuebe_v1_plugin_proto != nil {
+func init() { file_bonk_v1_plugin_proto_init() }
+func file_bonk_v1_plugin_proto_init() {
+	if File_bonk_v1_plugin_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_cuebe_v1_plugin_proto_rawDesc), len(file_cuebe_v1_plugin_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_bonk_v1_plugin_proto_rawDesc), len(file_bonk_v1_plugin_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_cuebe_v1_plugin_proto_goTypes,
-		DependencyIndexes: file_cuebe_v1_plugin_proto_depIdxs,
-		MessageInfos:      file_cuebe_v1_plugin_proto_msgTypes,
+		GoTypes:           file_bonk_v1_plugin_proto_goTypes,
+		DependencyIndexes: file_bonk_v1_plugin_proto_depIdxs,
+		MessageInfos:      file_bonk_v1_plugin_proto_msgTypes,
 	}.Build()
-	File_cuebe_v1_plugin_proto = out.File
-	file_cuebe_v1_plugin_proto_goTypes = nil
-	file_cuebe_v1_plugin_proto_depIdxs = nil
+	File_bonk_v1_plugin_proto = out.File
+	file_bonk_v1_plugin_proto_goTypes = nil
+	file_bonk_v1_plugin_proto_depIdxs = nil
 }
