@@ -17,7 +17,7 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	protov1 "github.com/dislogical/bonk/api/go/proto/bonk/v1"
+	protov1 "github.com/bonk-build/bonk/api/go/proto/bonk/v1"
 )
 
 var cuectx = cuecontext.New()

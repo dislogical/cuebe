@@ -6,7 +6,7 @@ package main
 import (
 	"log/slog"
 
-	plugin "github.com/dislogical/bonk/api/go"
+	plugin "github.com/bonk-build/bonk/api/go"
 )
 
 type Params struct {

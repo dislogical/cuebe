@@ -34,7 +34,7 @@ jobs:
         run: go run -tags docs ./cmd/bonk docs
 
       - name: generate go api docs
-        run: go tool gomarkdoc github.com/dislogical/bonk/api/go
+        run: go tool gomarkdoc github.com/bonk-build/bonk/api/go
 
       - name: commit generated docs
         uses: stefanzweifel/git-auto-commit-action@778341af668090896ca464160c2def5d1d1a3eb0 # v6.0.1

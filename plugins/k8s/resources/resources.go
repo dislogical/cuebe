@@ -11,7 +11,7 @@ import (
 	"cuelang.org/go/cue"
 	"cuelang.org/go/pkg/encoding/yaml"
 
-	plugin "github.com/dislogical/bonk/api/go"
+	plugin "github.com/bonk-build/bonk/api/go"
 )
 
 var output = "resources.yaml"
