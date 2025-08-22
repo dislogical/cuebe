@@ -24,7 +24,7 @@ func (id *TaskId) String() string {
 }
 
 func (id *TaskId) GetOutputDirectory() string {
-	return path.Join(".cuebe", id.String())
+	return path.Join(".bonk", id.String())
 }
 
 func (id *TaskId) GetChecksumFile() string {

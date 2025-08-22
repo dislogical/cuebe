@@ -23,8 +23,8 @@
   };
 
   outputs = {
-    cuebe = pkgs.buildGoModule rec {
-      name = "cuebe";
+    bonk = pkgs.buildGoModule rec {
+      name = "bonk";
       src = ./.;
 
       vendorHash = lib.fakeHash;

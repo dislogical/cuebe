@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 edition = "2023";
-package cuebe.v1;
+package bonk.v1;
 
 import "google/protobuf/struct.proto";
 
@@ -28,7 +28,7 @@ message PerformTaskRequest {
 
 message PerformTaskResponse {}
 
-service CuebePluginService {
+service BonkPluginService {
   rpc ConfigurePlugin(ConfigurePluginRequest) returns (ConfigurePluginResponse);
 
   rpc PerformTask(PerformTaskRequest) returns (PerformTaskResponse);
