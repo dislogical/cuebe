@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://coldencullen.com/cuebe/latest/</loc>
+         <loc>https://coldencullen.com/bonk/latest/</loc>
          <lastmod>2025-08-22</lastmod>
     </url>
     <url>
-         <loc>https://coldencullen.com/cuebe/latest/api/go/</loc>
+         <loc>https://coldencullen.com/bonk/latest/api/go/</loc>
          <lastmod>2025-08-22</lastmod>
     </url>
     <url>
-         <loc>https://coldencullen.com/cuebe/latest/cmd/cuebe/</loc>
+         <loc>https://coldencullen.com/bonk/latest/cmd/bonk/</loc>
          <lastmod>2025-08-22</lastmod>
     </url>
     <url>
-         <loc>https://coldencullen.com/cuebe/latest/cmd/cuebe_build/</loc>
+         <loc>https://coldencullen.com/bonk/latest/cmd/bonk_build/</loc>
          <lastmod>2025-08-22</lastmod>
     </url>
 </urlset>
