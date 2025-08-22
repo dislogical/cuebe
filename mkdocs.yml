@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 site_name: Bonk
-site_url: https://coldencullen.com/bonk/
+site_url: https://bonk.build/
 repo_url: https://github.com/bonk-build/bonk
 
 theme:
