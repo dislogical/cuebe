@@ -4,6 +4,7 @@
 package main // import "go.bonk.build/plugins/k8s/resources"
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -14,24 +15,23 @@ import (
 	plugin "go.bonk.build/api/go"
 )
 
-var output = "resources.yaml"
+const output = "resources.yaml"
 
 type Params struct {
-	Resources cue.Value `json:"resources" cue:"[...]"`
+	Resources cue.Value `cue:"[...]" json:"resources"`
 }
 
-func genResources(p plugin.TaskParams[Params]) error {
-
-	if len(p.Inputs) > 0 {
-		return fmt.Errorf("resources task does not accept inputs")
+func genResources(params *plugin.TaskParams[Params]) error {
+	if len(params.Inputs) > 0 {
+		return errors.New("resources task does not accept inputs")
 	}
 
-	resourcesYaml, err := yaml.MarshalStream(p.Params.Resources)
+	resourcesYaml, err := yaml.MarshalStream(params.Params.Resources)
 	if err != nil {
 		return fmt.Errorf("failed to marshal resources into yaml: %w", err)
 	}
 
-	err = os.WriteFile(path.Join(p.OutDir, output), []byte(resourcesYaml), os.ModePerm)
+	err = os.WriteFile(path.Join(params.OutDir, output), []byte(resourcesYaml), 0o600)
 	if err != nil {
 		return fmt.Errorf("failed to write resources yaml to disk: %w", err)
 	}

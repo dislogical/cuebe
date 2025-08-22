@@ -18,8 +18,9 @@ func main() {
 		plugin.NewBackend(
 			"Test",
 			[]string{},
-			func(param plugin.TaskParams[Params]) error {
+			func(param *plugin.TaskParams[Params]) error {
 				slog.Info("testing!", "param", param.Params)
+
 				return nil
 			},
 		),

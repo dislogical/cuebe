@@ -10,6 +10,7 @@ import (
 
 	"cuelang.org/go/cue/ast"
 	"cuelang.org/go/cue/cuecontext"
+
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -20,7 +21,7 @@ import (
 
 var cfgFile string
 
-// rootCmd represents the base command when called without any subcommands
+// rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:   "bonk",
 	Short: "A cue-based configuration build system.",
@@ -28,15 +29,13 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cuectx := cuecontext.New()
 
-		bm := backend.BackendManager{}
-		defer bm.Shutdown()
+		bem := backend.BackendManager{}
+		defer bem.Shutdown()
 
-		bm.Start()
-
-		wd, _ := os.Getwd()
+		bem.Start(cmd.Context())
 
 		cobra.CheckErr(
-			bm.SendTask(task.New(
+			bem.SendTask(task.New(
 				"Test",
 				"Test.Test",
 				cuectx.CompileString(`value: 3`),
@@ -44,7 +43,7 @@ var rootCmd = &cobra.Command{
 		)
 
 		cobra.CheckErr(
-			bm.SendTask(task.New(
+			bem.SendTask(task.New(
 				"Resources",
 				"Test.Resources",
 				cuectx.CompileString(`
@@ -56,19 +55,21 @@ var rootCmd = &cobra.Command{
 			)),
 		)
 
+		cwd, _ := os.Getwd()
 		cobra.CheckErr(
-			bm.SendTask(task.New(
+			bem.SendTask(task.New(
 				"Kustomize",
 				"Test.Kustomize",
 				cuectx.BuildExpr(ast.NewStruct()),
-				path.Join(wd, ".bonk/Test.Resources:Resources/resources.yaml"),
+				path.Join(cwd, ".bonk/Test.Resources:Resources/resources.yaml"),
 			)),
 		)
 	},
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is .bonk.yaml)")
+	rootCmd.PersistentFlags().
+		StringVarP(&cfgFile, "config", "c", "", "config file (default is .bonk.yaml)")
 
 	if cfgFile != "" {
 		// Use config file from the flag.
@@ -82,7 +83,8 @@ func init() {
 	viper.AutomaticEnv()
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
+	err := viper.ReadInConfig()
+	if err == nil {
 		slog.Debug("Using config file", "file", viper.ConfigFileUsed())
 	} else {
 		slog.Debug("Not using config file", "error", err.Error())

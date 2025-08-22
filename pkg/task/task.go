@@ -34,19 +34,19 @@ func (id *TaskId) GetChecksumFile() string {
 func (id *TaskId) LoadChecksum() ([]byte, error) {
 	checksumString, err := os.ReadFile(id.GetChecksumFile())
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read checksum file: %w", err)
 	}
 
 	checksum, err := base64.StdEncoding.DecodeString(string(checksumString))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to decode checksum base64: %w", err)
 	}
 
 	return checksum, nil
 }
 
 type Task struct {
-	Id TaskId
+	ID TaskId
 
 	Inputs []string
 	Params cue.Value
@@ -56,7 +56,7 @@ type Task struct {
 
 func New(backend, id string, params cue.Value, inputs ...string) Task {
 	return Task{
-		Id: TaskId{
+		ID: TaskId{
 			backend: backend,
 			id:      id,
 		},
@@ -66,11 +66,11 @@ func New(backend, id string, params cue.Value, inputs ...string) Task {
 }
 
 func (t *Task) Backend() string {
-	return t.Id.backend
+	return t.ID.backend
 }
 
 func (t *Task) GetOutputDirectory() string {
-	return t.Id.GetOutputDirectory()
+	return t.ID.GetOutputDirectory()
 }
 
 func (t *Task) GenerateChecksum() ([]byte, error) {
@@ -82,7 +82,7 @@ func (t *Task) GenerateChecksum() ([]byte, error) {
 	hasher := sha256.New()
 
 	// Hash the backend name
-	hasher.Write([]byte(t.Id.backend))
+	hasher.Write([]byte(t.ID.backend))
 
 	// Hash the input files
 	for _, file := range t.Inputs {
@@ -90,18 +90,21 @@ func (t *Task) GenerateChecksum() ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to hash input file %s: %w", file, err)
 		}
+
 		hasher.Write(fileBytes)
 	}
 
 	// Hash the parameters
-	paramsJson, err := t.Params.MarshalJSON()
+	paramsJSON, err := t.Params.MarshalJSON()
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal task params: %w", err)
 	}
-	hasher.Write(paramsJson)
+
+	hasher.Write(paramsJSON)
 
 	// Cache the checksum for next access
 	t.checksum = hasher.Sum(nil)
+
 	return t.checksum, nil
 }
 
@@ -113,15 +116,20 @@ func (t *Task) SaveChecksum() error {
 
 	checksumString := base64.StdEncoding.EncodeToString(checksum)
 
-	return os.WriteFile(
-		t.Id.GetChecksumFile(),
+	err = os.WriteFile(
+		t.ID.GetChecksumFile(),
 		[]byte(checksumString),
-		os.ModePerm,
+		0o600,
 	)
+	if err != nil {
+		return fmt.Errorf("failed to write checksum file: %w", err)
+	}
+
+	return nil
 }
 
 func (t *Task) CheckChecksum() bool {
-	savedChecksum, _ := t.Id.LoadChecksum()
+	savedChecksum, _ := t.ID.LoadChecksum()
 	if savedChecksum != nil {
 		newChecksum, _ := t.GenerateChecksum()
 
