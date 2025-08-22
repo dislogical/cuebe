@@ -3,4 +3,4 @@
 
 format: github
 output: ./docs/api/go.md
-package: github.com/bonk-build/bonk/api/go
+package: go.bonk.build/api/go

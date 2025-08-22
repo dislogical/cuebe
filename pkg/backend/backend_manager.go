@@ -1,7 +1,7 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-package backend
+package backend // import "go.bonk.build/pkg/backend"
 
 import (
 	"context"
@@ -18,9 +18,9 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	plugin "github.com/bonk-build/bonk/api/go"
-	protov1 "github.com/bonk-build/bonk/api/go/proto/bonk/v1"
-	"github.com/bonk-build/bonk/pkg/task"
+	plugin "go.bonk.build/api/go"
+	protov1 "go.bonk.build/api/go/proto/bonk/v1"
+	"go.bonk.build/pkg/task"
 )
 
 type Backend struct {
