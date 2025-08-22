@@ -22,13 +22,23 @@ import (
 
 var cuectx = cuecontext.New()
 
+// The inputs passed to a task backend
 type TaskParams[Params any] struct {
 	Inputs []string
 	Params *Params
 	OutDir string
 }
 
-func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[Params]) error) cuebeBackend {
+// Represents a backend capable of performing tasks
+type CuebeBackend struct {
+	Name         string
+	Outputs      []string
+	ParamsSchema cue.Value
+	Exec         func(TaskParams[cue.Value]) error
+}
+
+// Factory to create a new task backend
+func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[Params]) error) CuebeBackend {
 	zero := new(Params)
 
 	schema := cuectx.EncodeType(*zero)
@@ -38,11 +48,11 @@ func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[
 
 	slog.Info("backend schema", "backend", name, "schema", schema)
 
-	return cuebeBackend{
-		Name:    name,
-		Outputs: outputs,
-		Params:  schema,
-		execThunk: func(paramsCue TaskParams[cue.Value]) error {
+	return CuebeBackend{
+		Name:         name,
+		Outputs:      outputs,
+		ParamsSchema: schema,
+		Exec: func(paramsCue TaskParams[cue.Value]) error {
 			params := new(Params)
 			paramsCue.Params.Decode(params)
 			return exec(TaskParams[Params]{
@@ -54,8 +64,9 @@ func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[
 	}
 }
 
-func Serve(backends ...cuebeBackend) {
-	backendMap := make(map[string]cuebeBackend)
+// Call from main() to start the plugin gRPC server
+func Serve(backends ...CuebeBackend) {
+	backendMap := make(map[string]CuebeBackend)
 	for _, backend := range backends {
 		backendMap[backend.Name] = backend
 	}
@@ -81,18 +92,11 @@ const PluginType = "cuebe"
 
 // PRIVATE
 
-type cuebeBackend struct {
-	Name      string
-	Outputs   []string
-	Params    cue.Value
-	execThunk func(TaskParams[cue.Value]) error
-}
-
 type cuebePluginServer struct {
 	goplugin.NetRPCUnsupportedPlugin
 	goplugin.GRPCPlugin
 
-	backends map[string]cuebeBackend
+	backends map[string]CuebeBackend
 }
 
 func (p *cuebePluginServer) GRPCServer(broker *goplugin.GRPCBroker, s *grpc.Server) error {
@@ -108,7 +112,7 @@ type grpcServer struct {
 	protov1.UnimplementedCuebePluginServiceServer
 
 	decodeCodec *gocodec.Codec
-	backends    map[string]cuebeBackend
+	backends    map[string]CuebeBackend
 }
 
 func (s *grpcServer) ConfigurePlugin(ctx context.Context, req *protov1.ConfigurePluginRequest) (*protov1.ConfigurePluginResponse, error) {
@@ -137,9 +141,9 @@ func (s *grpcServer) PerformTask(ctx context.Context, req *protov1.PerformTaskRe
 		OutDir: req.GetOutDirectory(),
 	}
 
-	err := s.decodeCodec.Validate(backend.Params, req.GetParameters())
+	err := s.decodeCodec.Validate(backend.ParamsSchema, req.GetParameters())
 	if err != nil {
-		return nil, fmt.Errorf("params %s don't match required schema %s", req.GetParameters(), backend.Params)
+		return nil, fmt.Errorf("params %s don't match required schema %s", req.GetParameters(), backend.ParamsSchema)
 	}
 
 	*params.Params, err = s.decodeCodec.Decode(req.GetParameters())
@@ -147,7 +151,7 @@ func (s *grpcServer) PerformTask(ctx context.Context, req *protov1.PerformTaskRe
 		return nil, fmt.Errorf("failed to decode parameters: %w", err)
 	}
 
-	err = backend.execThunk(params)
+	err = backend.Exec(params)
 	if err != nil {
 		return nil, err
 	}
