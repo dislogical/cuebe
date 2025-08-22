@@ -1,0 +1,6 @@
+# Copyright © 2025 Colden Cullen
+# SPDX-License-Identifier: MIT
+
+format: github
+output: ./docs/api/go.md
+package: github.com/dislogical/cuebe/api/go
