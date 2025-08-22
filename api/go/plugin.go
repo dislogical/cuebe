@@ -3,6 +3,8 @@
 
 package plugin
 
+//go:generate go tool -C ../.. buf generate
+
 import (
 	"context"
 	"fmt"
