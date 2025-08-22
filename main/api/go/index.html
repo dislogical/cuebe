@@ -593,7 +593,7 @@
 <li><a href="#variables">Variables</a></li>
 <li><a href="#Serve">func Serve(backends ...BonkBackend)</a></li>
 <li><a href="#BonkBackend">type BonkBackend</a></li>
-<li><a href="#NewBackend">func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[Params]) error) BonkBackend</a></li>
+<li><a href="#NewBackend">func NewBackend[Params any](name string, outputs []string, exec func(*TaskParams[Params]) error) BonkBackend</a></li>
 <li><a href="#TaskParams">type TaskParams</a></li>
 </ul>
 <h2 id="constants">Constants</h2>
@@ -612,10 +612,10 @@
 <h2 id="func-serve">func Serve</h2>
 <pre><code class="language-go">func Serve(backends ...BonkBackend)
 </code></pre>
-<p>Call from main() to start the plugin gRPC server</p>
+<p>Call from main() to start the plugin gRPC server.</p>
 <p><a name="BonkBackend"></a></p>
 <h2 id="type-bonkbackend">type BonkBackend</h2>
-<p>Represents a backend capable of performing tasks</p>
+<p>Represents a backend capable of performing tasks.</p>
 <pre><code class="language-go">type BonkBackend struct {
     Name         string
     Outputs      []string
@@ -625,15 +625,15 @@
 </code></pre>
 <p><a name="NewBackend"></a></p>
 <h3 id="func-newbackend">func NewBackend</h3>
-<pre><code class="language-go">func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[Params]) error) BonkBackend
+<pre><code class="language-go">func NewBackend[Params any](name string, outputs []string, exec func(*TaskParams[Params]) error) BonkBackend
 </code></pre>
-<p>Factory to create a new task backend</p>
+<p>Factory to create a new task backend.</p>
 <p><a name="TaskParams"></a></p>
 <h2 id="type-taskparams">type TaskParams</h2>
-<p>The inputs passed to a task backend</p>
+<p>The inputs passed to a task backend.</p>
 <pre><code class="language-go">type TaskParams[Params any] struct {
+    Params Params
     Inputs []string
-    Params *Params
     OutDir string
 }
 </code></pre>
