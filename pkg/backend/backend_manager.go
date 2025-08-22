@@ -5,10 +5,12 @@ package backend // import "go.bonk.build/pkg/backend"
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
 	"os/exec"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -31,14 +33,16 @@ type Backend struct {
 }
 
 type BackendManager struct {
+	cancel   context.CancelCauseFunc
 	cuectx   *cue.Context
 	plugins  map[string]map[string]Backend
 	backends map[string]Backend
 }
 
-func (bm *BackendManager) Start() {
+func (bm *BackendManager) Start(ctx context.Context) {
 	slog.Info("Starting Daemon")
 
+	ctx, bm.cancel = context.WithCancelCause(ctx)
 	bm.cuectx = cuecontext.New()
 	bm.plugins = make(map[string]map[string]Backend)
 	bm.backends = make(map[string]Backend)
@@ -49,7 +53,7 @@ func (bm *BackendManager) Start() {
 			Plugins: map[string]goplugin.Plugin{
 				plugin.PluginType: &bonkPluginClient{},
 			},
-			Cmd:     exec.Command("go", "run", pluginPath),
+			Cmd:     exec.CommandContext(ctx, "go", "run", pluginPath),
 			Managed: true,
 			AllowedProtocols: []goplugin.Protocol{
 				goplugin.ProtocolGRPC,
@@ -75,7 +79,9 @@ func (bm *BackendManager) Start() {
 			continue
 		}
 
-		resp, err := bonkClient.ConfigurePlugin(context.TODO(), &protov1.ConfigurePluginRequest{})
+		configureCtx, cancel := context.WithTimeout(ctx, 1*time.Second)
+		resp, err := bonkClient.ConfigurePlugin(configureCtx, &protov1.ConfigurePluginRequest{})
+		cancel()
 		if err != nil {
 			slog.Error("Failed to describe plugin backends", "error", err)
 
@@ -111,7 +117,7 @@ func (bm *BackendManager) SendTask(tsk task.Task) error {
 
 	stat, err := os.Stat(outDir)
 	if err != nil || !stat.IsDir() {
-		err := os.MkdirAll(outDir, os.ModePerm)
+		err := os.MkdirAll(outDir, 0o750)
 		if err != nil {
 			return fmt.Errorf("failed to create temp directory: %w", err)
 		}
@@ -154,6 +160,8 @@ func (bm *BackendManager) Shutdown() {
 	bm.backends = make(map[string]Backend)
 
 	goplugin.CleanupClients()
+
+	bm.cancel(errors.New("terminating"))
 }
 
 // Plugin Client

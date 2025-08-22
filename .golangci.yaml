@@ -12,7 +12,8 @@ linters:
     - wsl
     - wsl_v5
 
-    # TODO(colden)
+    # TODO
+    - funlen
     - gochecknoglobals
     - revive
 
@@ -43,6 +44,19 @@ linters:
               desc: use math/rand/v2
             - pkg: "github.com/pkg/errors"
               desc: Should be replaced by standard lib errors package
+
+    gosec:
+      excludes:
+        - G204 # Subprocess launched with variable
+        - G304 # Potential file inclusion via variable
+
+    mnd:
+      # List of numbers to exclude from analysis.
+      # The numbers should be written as string.
+      # Values always ignored: "1", "1.0", "0" and "0.0".
+      ignored-numbers:
+        - '0o600'
+        - '0o750'
 
 formatters:
   # Enable specific formatter.

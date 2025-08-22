@@ -116,11 +116,16 @@ func (t *Task) SaveChecksum() error {
 
 	checksumString := base64.StdEncoding.EncodeToString(checksum)
 
-	return os.WriteFile(
+	err = os.WriteFile(
 		t.ID.GetChecksumFile(),
 		[]byte(checksumString),
-		os.ModePerm,
+		0o600,
 	)
+	if err != nil {
+		return fmt.Errorf("failed to write checksum file: %w", err)
+	}
+
+	return nil
 }
 
 func (t *Task) CheckChecksum() bool {

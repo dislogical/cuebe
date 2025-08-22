@@ -66,7 +66,7 @@ func kustomize(params *plugin.TaskParams[Params]) error {
 		return fmt.Errorf("failed to encode kustomized content as yaml: %w", err)
 	}
 
-	err = os.WriteFile(path.Join(params.OutDir, output), resYaml, os.ModePerm)
+	err = os.WriteFile(path.Join(params.OutDir, output), resYaml, 0o600)
 	if err != nil {
 		return fmt.Errorf("failed to write kustomized content to file: %w", err)
 	}

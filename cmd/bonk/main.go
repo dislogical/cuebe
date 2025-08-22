@@ -26,13 +26,13 @@ var rootCmd = &cobra.Command{
 	Use:   "bonk",
 	Short: "A cue-based configuration build system.",
 
-	Run: func(_ *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, args []string) {
 		cuectx := cuecontext.New()
 
 		bem := backend.BackendManager{}
 		defer bem.Shutdown()
 
-		bem.Start()
+		bem.Start(cmd.Context())
 
 		cobra.CheckErr(
 			bem.SendTask(task.New(
