@@ -5,15 +5,37 @@ version: "2"
 
 linters:
   default: all
-  enable:
-    - wsl_v5
   disable:
+    - exhaustruct
     - wsl
+    - wsl_v5
   settings:
-    wsl_v5:
-      allow-first-in-block: true
-      allow-whole-block: false
-      branch-max-lines: 2
+    depguard:
+      # Rules to apply.
+      #
+      # Variables:
+      # - File Variables
+      #   Use an exclamation mark `!` to negate a variable.
+      #   Example: `!$test` matches any file that is not a go test file.
+      #
+      #   `$all` - matches all go files
+      #   `$test` - matches all go test files
+      #
+      # - Package Variables
+      #
+      #   `$gostd` - matches all of go's standard library (Pulled from `GOROOT`)
+      rules:
+        main:
+          # Defines package matching behavior. Available modes:
+          # - `original`: allowed if it doesn't match the deny list and either matches the allow list or the allow list is empty.
+          # - `strict`: allowed only if it matches the allow list and either doesn't match the deny list or the allow rule is more specific (longer) than the deny rule.
+          # - `lax`: allowed if it doesn't match the deny list or the allow rule is more specific (longer) than the deny rule.
+          list-mode: lax
+          deny:
+            - pkg: "math/rand$"
+              desc: use math/rand/v2
+            - pkg: "github.com/pkg/errors"
+              desc: Should be replaced by standard lib errors package
 
 formatters:
   # Enable specific formatter.
@@ -87,12 +109,6 @@ issues:
   # Maximum count of issues with the same text.
   # Set to 0 to disable.
   max-same-issues: 0
-
-  # Show only new issues created after the best common ancestor (merge-base against HEAD).
-  new-from-merge-base: main
-
-  # Show only new issues created after git revision `REV`.
-  new-from-rev: HEAD
 
   # Fix found issues (if it's supported by the linter).
   fix: true

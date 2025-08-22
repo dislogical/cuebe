@@ -20,6 +20,7 @@ func main() {
 			[]string{},
 			func(param plugin.TaskParams[Params]) error {
 				slog.Info("testing!", "param", param.Params)
+
 				return nil
 			},
 		),

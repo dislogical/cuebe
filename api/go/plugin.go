@@ -10,10 +10,11 @@ import (
 	"fmt"
 	"log/slog"
 
+	"google.golang.org/grpc"
+
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/cuecontext"
 	"cuelang.org/go/encoding/gocode/gocodec"
-	"google.golang.org/grpc"
 
 	goplugin "github.com/hashicorp/go-plugin"
 
@@ -22,14 +23,14 @@ import (
 
 var cuectx = cuecontext.New()
 
-// The inputs passed to a task backend
+// The inputs passed to a task backend.
 type TaskParams[Params any] struct {
 	Inputs []string
 	Params *Params
 	OutDir string
 }
 
-// Represents a backend capable of performing tasks
+// Represents a backend capable of performing tasks.
 type BonkBackend struct {
 	Name         string
 	Outputs      []string
@@ -37,8 +38,12 @@ type BonkBackend struct {
 	Exec         func(TaskParams[cue.Value]) error
 }
 
-// Factory to create a new task backend
-func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[Params]) error) BonkBackend {
+// Factory to create a new task backend.
+func NewBackend[Params any](
+	name string,
+	outputs []string,
+	exec func(TaskParams[Params]) error,
+) BonkBackend {
 	zero := new(Params)
 
 	schema := cuectx.EncodeType(*zero)
@@ -54,7 +59,11 @@ func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[
 		ParamsSchema: schema,
 		Exec: func(paramsCue TaskParams[cue.Value]) error {
 			params := new(Params)
-			paramsCue.Params.Decode(params)
+			err := paramsCue.Params.Decode(params)
+			if err != nil {
+				return fmt.Errorf("failed to decode task parameters: %w", err)
+			}
+
 			return exec(TaskParams[Params]{
 				Inputs: paramsCue.Inputs,
 				Params: params,
@@ -64,7 +73,7 @@ func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[
 	}
 }
 
-// Call from main() to start the plugin gRPC server
+// Call from main() to start the plugin gRPC server.
 func Serve(backends ...BonkBackend) {
 	backendMap := make(map[string]BonkBackend)
 	for _, backend := range backends {
@@ -99,11 +108,12 @@ type bonkPluginServer struct {
 	backends map[string]BonkBackend
 }
 
-func (p *bonkPluginServer) GRPCServer(broker *goplugin.GRPCBroker, s *grpc.Server) error {
+func (p *bonkPluginServer) GRPCServer(_ *goplugin.GRPCBroker, s *grpc.Server) error {
 	protov1.RegisterBonkPluginServiceServer(s, &grpcServer{
 		decodeCodec: gocodec.New(cuectx, &gocodec.Config{}),
 		backends:    p.backends,
 	})
+
 	return nil
 }
 
@@ -115,7 +125,10 @@ type grpcServer struct {
 	backends    map[string]BonkBackend
 }
 
-func (s *grpcServer) ConfigurePlugin(ctx context.Context, req *protov1.ConfigurePluginRequest) (*protov1.ConfigurePluginResponse, error) {
+func (s *grpcServer) ConfigurePlugin(
+	ctx context.Context,
+	req *protov1.ConfigurePluginRequest,
+) (*protov1.ConfigurePluginResponse, error) {
 	respBuilder := protov1.ConfigurePluginResponse_builder{
 		Backends: make(map[string]*protov1.ConfigurePluginResponse_BackendDescription, len(s.backends)),
 	}
@@ -129,7 +142,10 @@ func (s *grpcServer) ConfigurePlugin(ctx context.Context, req *protov1.Configure
 	return respBuilder.Build(), nil
 }
 
-func (s *grpcServer) PerformTask(ctx context.Context, req *protov1.PerformTaskRequest) (*protov1.PerformTaskResponse, error) {
+func (s *grpcServer) PerformTask(
+	ctx context.Context,
+	req *protov1.PerformTaskRequest,
+) (*protov1.PerformTaskResponse, error) {
 	backend, ok := s.backends[req.GetBackend()]
 	if !ok {
 		return nil, fmt.Errorf("backend %s is not registered to this plugin", req.GetBackend())
@@ -143,7 +159,11 @@ func (s *grpcServer) PerformTask(ctx context.Context, req *protov1.PerformTaskRe
 
 	err := s.decodeCodec.Validate(backend.ParamsSchema, req.GetParameters())
 	if err != nil {
-		return nil, fmt.Errorf("params %s don't match required schema %s", req.GetParameters(), backend.ParamsSchema)
+		return nil, fmt.Errorf(
+			"params %s don't match required schema %s",
+			req.GetParameters(),
+			backend.ParamsSchema,
+		)
 	}
 
 	*params.Params, err = s.decodeCodec.Decode(req.GetParameters())

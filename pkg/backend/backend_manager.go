@@ -10,11 +10,12 @@ import (
 	"os"
 	"os/exec"
 
+	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/structpb"
+
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/cuecontext"
 	"cuelang.org/go/encoding/gocode/gocodec"
-	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/structpb"
 
 	goplugin "github.com/hashicorp/go-plugin"
 
@@ -93,6 +94,7 @@ func (bm *BackendManager) Start() {
 
 func (bm *BackendManager) SendTask(t task.Task) error {
 	backendName := t.Backend()
+
 	backend, ok := bm.backends[backendName]
 	if !ok {
 		return fmt.Errorf("Backend %s not found", backendName)
@@ -100,16 +102,16 @@ func (bm *BackendManager) SendTask(t task.Task) error {
 
 	outDir := t.GetOutputDirectory()
 
-	if stat, err := os.Stat(outDir); err != nil || !stat.IsDir() {
+	stat, err := os.Stat(outDir)
+	if err != nil || !stat.IsDir() {
 		err := os.MkdirAll(outDir, os.ModePerm)
 		if err != nil {
 			return fmt.Errorf("failed to create temp directory: %w", err)
 		}
-	} else {
-		if t.CheckChecksum() {
-			slog.Debug("checksums match, skipping task")
-			return nil
-		}
+	} else if t.CheckChecksum() {
+		slog.Debug("checksums match, skipping task")
+
+		return nil
 	}
 
 	taskReqBuilder := protov1.PerformTaskRequest_builder{
@@ -120,14 +122,18 @@ func (bm *BackendManager) SendTask(t task.Task) error {
 	}
 
 	codec := gocodec.New(bm.cuectx, &gocodec.Config{})
-	codec.Encode(t.Params, taskReqBuilder.Parameters)
+	err = codec.Encode(t.Params, taskReqBuilder.Parameters)
+	if err != nil {
+		return fmt.Errorf("failed to encode parameters as protobuf: %w", err)
+	}
 
-	_, err := backend.client.PerformTask(context.TODO(), taskReqBuilder.Build())
+	_, err = backend.client.PerformTask(context.TODO(), taskReqBuilder.Build())
 	if err != nil {
 		return fmt.Errorf("failed to perform task: %w", err)
 	}
 
 	slog.Info("task succeeded, saving checksum")
+
 	err = t.SaveChecksum()
 	if err != nil {
 		return fmt.Errorf("failed to checksum task: %w", err)
@@ -139,6 +145,7 @@ func (bm *BackendManager) SendTask(t task.Task) error {
 func (bm *BackendManager) Shutdown() {
 	bm.plugins = make(map[string]map[string]Backend)
 	bm.backends = make(map[string]Backend)
+
 	goplugin.CleanupClients()
 }
 
@@ -149,6 +156,10 @@ type bonkPluginClient struct {
 	goplugin.GRPCPlugin
 }
 
-func (p *bonkPluginClient) GRPCClient(ctx context.Context, broker *goplugin.GRPCBroker, c *grpc.ClientConn) (interface{}, error) {
+func (p *bonkPluginClient) GRPCClient(
+	_ context.Context,
+	_ *goplugin.GRPCBroker,
+	c *grpc.ClientConn,
+) (any, error) {
 	return protov1.NewBonkPluginServiceClient(c), nil
 }

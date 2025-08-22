@@ -6,15 +6,15 @@ package main
 import (
 	"log/slog"
 
-	"github.com/spf13/cobra"
-
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/cuecontext"
 	"cuelang.org/go/cue/format"
 	"cuelang.org/go/cue/load"
+
+	"github.com/spf13/cobra"
 )
 
-// buildCmd represents the build command
+// buildCmd represents the build command.
 var buildCmd = &cobra.Command{
 	Use:   "build [paths...]",
 	Short: "A brief description of your command",
@@ -22,7 +22,7 @@ var buildCmd = &cobra.Command{
 	Args:       cobra.ArbitraryArgs,
 	ArgAliases: []string{"paths"},
 
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(_ *cobra.Command, args []string) {
 		slog.Info("Perforing Build")
 
 		config := load.Config{}
