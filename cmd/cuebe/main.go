@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/dislogical/cuebe/pkg/backend/manager"
+	"github.com/dislogical/cuebe/pkg/backend"
 	"github.com/dislogical/cuebe/pkg/task"
 )
 
@@ -28,7 +28,7 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cuectx := cuecontext.New()
 
-		bm := manager.BackendManager{}
+		bm := backend.BackendManager{}
 		defer bm.Shutdown()
 
 		bm.Start()

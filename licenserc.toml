@@ -6,7 +6,7 @@ Copyright © 2025 Colden Cullen
 SPDX-License-Identifier: MIT \
 """
 
-excludes = ["*.lock", "*.sum"]
+excludes = ["*.lock", "*.sum", "*.pb.go"]
 
 [mapping.DOUBLESLASH_STYLE]
 extensions = ["go", "cue", "proto"]

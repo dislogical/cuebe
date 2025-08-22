@@ -69,3 +69,14 @@ repos:
         entry: cue vet -c
         types: [cue, yaml]
         pass_filenames: false
+
+      - id: buf-fmt
+        name: buf format
+        language: system
+        entry: go tool buf format
+        types: [proto]
+      - id: buf-lint
+        name: buf lint
+        language: system
+        entry: go tool buf lint
+        types: [proto]
