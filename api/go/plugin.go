@@ -25,8 +25,8 @@ var cuectx = cuecontext.New()
 
 // The inputs passed to a task backend.
 type TaskParams[Params any] struct {
+	Params Params
 	Inputs []string
-	Params *Params
 	OutDir string
 }
 
@@ -42,7 +42,7 @@ type BonkBackend struct {
 func NewBackend[Params any](
 	name string,
 	outputs []string,
-	exec func(TaskParams[Params]) error,
+	exec func(*TaskParams[Params]) error,
 ) BonkBackend {
 	zero := new(Params)
 
@@ -58,17 +58,13 @@ func NewBackend[Params any](
 		Outputs:      outputs,
 		ParamsSchema: schema,
 		Exec: func(paramsCue TaskParams[cue.Value]) error {
-			params := new(Params)
-			err := paramsCue.Params.Decode(params)
+			params := new(TaskParams[Params])
+			err := paramsCue.Params.Decode(params.Params)
 			if err != nil {
 				return fmt.Errorf("failed to decode task parameters: %w", err)
 			}
 
-			return exec(TaskParams[Params]{
-				Inputs: paramsCue.Inputs,
-				Params: params,
-				OutDir: paramsCue.OutDir,
-			})
+			return exec(params)
 		},
 	}
 }
@@ -152,8 +148,8 @@ func (s *grpcServer) PerformTask(
 	}
 
 	params := TaskParams[cue.Value]{
+		Params: cue.Value{},
 		Inputs: req.GetInputs(),
-		Params: &cue.Value{},
 		OutDir: req.GetOutDirectory(),
 	}
 
@@ -166,7 +162,7 @@ func (s *grpcServer) PerformTask(
 		)
 	}
 
-	*params.Params, err = s.decodeCodec.Decode(req.GetParameters())
+	params.Params, err = s.decodeCodec.Decode(req.GetParameters())
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode parameters: %w", err)
 	}

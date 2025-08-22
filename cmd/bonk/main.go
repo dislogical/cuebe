@@ -29,15 +29,13 @@ var rootCmd = &cobra.Command{
 	Run: func(_ *cobra.Command, args []string) {
 		cuectx := cuecontext.New()
 
-		bm := backend.BackendManager{}
-		defer bm.Shutdown()
+		bem := backend.BackendManager{}
+		defer bem.Shutdown()
 
-		bm.Start()
-
-		wd, _ := os.Getwd()
+		bem.Start()
 
 		cobra.CheckErr(
-			bm.SendTask(task.New(
+			bem.SendTask(task.New(
 				"Test",
 				"Test.Test",
 				cuectx.CompileString(`value: 3`),
@@ -45,7 +43,7 @@ var rootCmd = &cobra.Command{
 		)
 
 		cobra.CheckErr(
-			bm.SendTask(task.New(
+			bem.SendTask(task.New(
 				"Resources",
 				"Test.Resources",
 				cuectx.CompileString(`
@@ -57,12 +55,13 @@ var rootCmd = &cobra.Command{
 			)),
 		)
 
+		cwd, _ := os.Getwd()
 		cobra.CheckErr(
-			bm.SendTask(task.New(
+			bem.SendTask(task.New(
 				"Kustomize",
 				"Test.Kustomize",
 				cuectx.BuildExpr(ast.NewStruct()),
-				path.Join(wd, ".bonk/Test.Resources:Resources/resources.yaml"),
+				path.Join(cwd, ".bonk/Test.Resources:Resources/resources.yaml"),
 			)),
 		)
 	},

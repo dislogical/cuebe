@@ -59,7 +59,6 @@ var buildCmd = &cobra.Command{
 
 		str, err := format.Node(syn,
 			format.TabIndent(false),
-			format.UseSpaces(2),
 			format.Simplify(),
 		)
 		if err != nil {

@@ -21,17 +21,17 @@ type Params struct {
 	Resources cue.Value `cue:"[...]" json:"resources"`
 }
 
-func genResources(p plugin.TaskParams[Params]) error {
-	if len(p.Inputs) > 0 {
+func genResources(params *plugin.TaskParams[Params]) error {
+	if len(params.Inputs) > 0 {
 		return errors.New("resources task does not accept inputs")
 	}
 
-	resourcesYaml, err := yaml.MarshalStream(p.Params.Resources)
+	resourcesYaml, err := yaml.MarshalStream(params.Params.Resources)
 	if err != nil {
 		return fmt.Errorf("failed to marshal resources into yaml: %w", err)
 	}
 
-	err = os.WriteFile(path.Join(p.OutDir, output), []byte(resourcesYaml), os.ModePerm)
+	err = os.WriteFile(path.Join(params.OutDir, output), []byte(resourcesYaml), os.ModePerm)
 	if err != nil {
 		return fmt.Errorf("failed to write resources yaml to disk: %w", err)
 	}

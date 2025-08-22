@@ -68,11 +68,18 @@ func (bm *BackendManager) Start() {
 			os.Exit(1)
 		}
 
-		bonkClient := bonkPlugin.(protov1.BonkPluginServiceClient)
+		bonkClient, ok := bonkPlugin.(protov1.BonkPluginServiceClient)
+		if !ok {
+			slog.Error("got unexpected plugin client type")
+
+			continue
+		}
 
 		resp, err := bonkClient.ConfigurePlugin(context.TODO(), &protov1.ConfigurePluginRequest{})
 		if err != nil {
 			slog.Error("Failed to describe plugin backends", "error", err)
+
+			continue
 		}
 
 		bm.plugins[pluginPath] = make(map[string]Backend)
@@ -92,15 +99,15 @@ func (bm *BackendManager) Start() {
 	}
 }
 
-func (bm *BackendManager) SendTask(t task.Task) error {
-	backendName := t.Backend()
+func (bm *BackendManager) SendTask(tsk task.Task) error {
+	backendName := tsk.Backend()
 
 	backend, ok := bm.backends[backendName]
 	if !ok {
 		return fmt.Errorf("Backend %s not found", backendName)
 	}
 
-	outDir := t.GetOutputDirectory()
+	outDir := tsk.GetOutputDirectory()
 
 	stat, err := os.Stat(outDir)
 	if err != nil || !stat.IsDir() {
@@ -108,7 +115,7 @@ func (bm *BackendManager) SendTask(t task.Task) error {
 		if err != nil {
 			return fmt.Errorf("failed to create temp directory: %w", err)
 		}
-	} else if t.CheckChecksum() {
+	} else if tsk.CheckChecksum() {
 		slog.Debug("checksums match, skipping task")
 
 		return nil
@@ -116,13 +123,13 @@ func (bm *BackendManager) SendTask(t task.Task) error {
 
 	taskReqBuilder := protov1.PerformTaskRequest_builder{
 		Backend:      &backendName,
-		Inputs:       t.Inputs,
+		Inputs:       tsk.Inputs,
 		Parameters:   &structpb.Value{},
 		OutDirectory: &outDir,
 	}
 
 	codec := gocodec.New(bm.cuectx, &gocodec.Config{})
-	err = codec.Encode(t.Params, taskReqBuilder.Parameters)
+	err = codec.Encode(tsk.Params, taskReqBuilder.Parameters)
 	if err != nil {
 		return fmt.Errorf("failed to encode parameters as protobuf: %w", err)
 	}
@@ -134,7 +141,7 @@ func (bm *BackendManager) SendTask(t task.Task) error {
 
 	slog.Info("task succeeded, saving checksum")
 
-	err = t.SaveChecksum()
+	err = tsk.SaveChecksum()
 	if err != nil {
 		return fmt.Errorf("failed to checksum task: %w", err)
 	}

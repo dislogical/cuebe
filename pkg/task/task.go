@@ -34,12 +34,12 @@ func (id *TaskId) GetChecksumFile() string {
 func (id *TaskId) LoadChecksum() ([]byte, error) {
 	checksumString, err := os.ReadFile(id.GetChecksumFile())
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read checksum file: %w", err)
 	}
 
 	checksum, err := base64.StdEncoding.DecodeString(string(checksumString))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to decode checksum base64: %w", err)
 	}
 
 	return checksum, nil

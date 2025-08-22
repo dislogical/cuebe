@@ -6,9 +6,16 @@ version: "2"
 linters:
   default: all
   disable:
+    - err113
     - exhaustruct
+    - gochecknoinits
     - wsl
     - wsl_v5
+
+    # TODO(colden)
+    - gochecknoglobals
+    - revive
+
   settings:
     depguard:
       # Rules to apply.
