@@ -1,12 +1,12 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-package main
+package main // import "go.bonk.build/plugins/test"
 
 import (
 	"log/slog"
 
-	plugin "github.com/bonk-build/bonk/api/go"
+	plugin "go.bonk.build/api/go"
 )
 
 type Params struct {

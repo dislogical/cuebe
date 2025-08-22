@@ -13,7 +13,7 @@
   },
   "gopls": {
     "build.expandWorkspaceToModule": true,
-    "formatting.local": "github.com/bonk-build/bonk",
+    "formatting.local": "go.bonk.build",
     "build.standaloneTags": [
       "ignore",
       "docs"

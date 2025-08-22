@@ -1,7 +1,7 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-package task
+package task // import "go.bonk.build/pkg/task"
 
 import (
 	"crypto/sha256"

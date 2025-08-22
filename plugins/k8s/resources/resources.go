@@ -1,7 +1,7 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-package main
+package main // import "go.bonk.build/plugins/k8s/resources"
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"cuelang.org/go/cue"
 	"cuelang.org/go/pkg/encoding/yaml"
 
-	plugin "github.com/bonk-build/bonk/api/go"
+	plugin "go.bonk.build/api/go"
 )
 
 var output = "resources.yaml"

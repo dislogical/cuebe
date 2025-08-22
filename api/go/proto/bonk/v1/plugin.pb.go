@@ -395,7 +395,7 @@ const file_bonk_v1_plugin_proto_rawDesc = "" +
 	"\x11BonkPluginService\x12T\n" +
 	"\x0fConfigurePlugin\x12\x1f.bonk.v1.ConfigurePluginRequest\x1a .bonk.v1.ConfigurePluginResponse\x12H\n" +
 	"\vPerformTask\x12\x1b.bonk.v1.PerformTaskRequest\x1a\x1c.bonk.v1.PerformTaskResponseB\x94\x01\n" +
-	"\vcom.bonk.v1B\vPluginProtoP\x01Z6github.com/bonk-build/bonk/api/go/proto/bonk/v1;bonkv1\xa2\x02\x03BXX\xaa\x02\aBonk.V1\xca\x02\aBonk\\V1\xe2\x02\x13Bonk\\V1\\GPBMetadata\xea\x02\bBonk::V1\x92\x03\x02\b\x01b\beditionsp\xe8\a"
+	"\vcom.bonk.v1B\vPluginProtoP\x01Z6go.bonk.build/api/go/proto/bonk/v1;bonkv1\xa2\x02\x03BXX\xaa\x02\aBonk.V1\xca\x02\aBonk\\V1\xe2\x02\x13Bonk\\V1\\GPBMetadata\xea\x02\bBonk::V1\x92\x03\x02\b\x01b\beditionsp\xe8\a"
 
 var file_bonk_v1_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_bonk_v1_plugin_proto_goTypes = []any{

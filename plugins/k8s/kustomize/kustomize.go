@@ -1,14 +1,14 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-package main
+package main // import "go.bonk.build/plugins/k8s/kustomize"
 
 import (
 	"fmt"
 	"os"
 	"path"
 
-	plugin "github.com/bonk-build/bonk/api/go"
+	plugin "go.bonk.build/api/go"
 
 	"sigs.k8s.io/kustomize/api/konfig"
 	"sigs.k8s.io/kustomize/api/krusty"

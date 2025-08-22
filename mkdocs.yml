@@ -3,7 +3,7 @@
 
 site_name: Bonk
 site_url: https://bonk.build/
-repo_url: https://github.com/bonk-build/bonk
+repo_url: https://go.bonk.build
 
 theme:
   name: material

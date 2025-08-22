@@ -1,7 +1,7 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-package plugin
+package plugin // import "go.bonk.build/api/go"
 
 //go:generate go tool -C ../.. buf generate
 
@@ -17,7 +17,7 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	protov1 "github.com/bonk-build/bonk/api/go/proto/bonk/v1"
+	protov1 "go.bonk.build/api/go/proto/bonk/v1"
 )
 
 var cuectx = cuecontext.New()

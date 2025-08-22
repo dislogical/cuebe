@@ -6,7 +6,7 @@ managed:
   enabled: true
   override:
     - file_option: go_package_prefix
-      value: github.com/bonk-build/bonk/api/go/proto
+      value: go.bonk.build/api/go/proto
 plugins:
   - remote: buf.build/protocolbuffers/go
     out: api/go/proto
