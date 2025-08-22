@@ -1,0 +1,132 @@
+# Copyright © 2025 Colden Cullen
+# SPDX-License-Identifier: MIT
+
+version: "2"
+
+linters:
+  default: all
+  enable:
+    - wsl_v5
+  disable:
+    - wsl
+  settings:
+    wsl_v5:
+      allow-first-in-block: true
+      allow-whole-block: false
+      branch-max-lines: 2
+
+formatters:
+  # Enable specific formatter.
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - golines
+
+  # Formatters settings.
+  settings:
+    gci:
+      # Section configuration to compare against.
+      # Section names are case-insensitive and may contain parameters in ().
+      # The default order of sections is `standard > default > custom > blank > dot > alias > localmodule`.
+      # If `custom-order` is `true`, it follows the order of `sections` option.
+      sections:
+        - standard # Standard section: captures all standard packages.
+        - default # Default section: contains all imports that could not be matched to another section type.
+        - prefix(google.golang.org) # Custom section: groups all imports with the specified Prefix.
+        - prefix(sigs.k8s.io) # Custom section: groups all imports with the specified Prefix.
+        - prefix(cuelang.org) # Custom section: groups all imports with the specified Prefix.
+        - prefix(github.com) # Custom section: groups all imports with the specified Prefix.
+        - blank # Blank section: contains all blank imports.
+        - alias # Alias section: contains all alias imports.
+        - localmodule # Local module section: contains all local packages.
+      # Checks that no inline comments are present.
+      # Default: false
+      no-inline-comments: true
+      # Checks that no prefix comments (comment lines above an import) are present.
+      # Default: false
+      no-prefix-comments: true
+      # Enable custom order of sections.
+      # If `true`, make the section order the same as the order of `sections`.
+      # Default: false
+      custom-order: true
+
+    gofmt:
+      # Simplify code: gofmt with `-s` option.
+      # Default: true
+      simplify: true
+      rewrite-rules:
+        - pattern: "interface{}"
+          replacement: "any"
+        - pattern: "a[b:len(a)]"
+          replacement: "a[b:]"
+
+    gofumpt:
+      # Module path which contains the source code being formatted.
+      module-path: go.bonk.build
+
+      # Choose whether to use the extra rules.
+      extra-rules: true
+
+    goimports:
+      # A list of prefixes, which, if set, checks import paths
+      # with the given prefixes are grouped after 3rd-party packages.
+      # Default: []
+      local-prefixes:
+        - go.bonk.build
+
+    golines:
+      # Length of a tabulation.
+      tab-len: 2
+
+issues:
+  # Maximum issues count per one linter.
+  # Set to 0 to disable.
+  max-issues-per-linter: 0
+
+  # Maximum count of issues with the same text.
+  # Set to 0 to disable.
+  max-same-issues: 0
+
+  # Show only new issues created after the best common ancestor (merge-base against HEAD).
+  new-from-merge-base: main
+
+  # Show only new issues created after git revision `REV`.
+  new-from-rev: HEAD
+
+  # Fix found issues (if it's supported by the linter).
+  fix: true
+
+# Options for analysis running.
+run:
+  # Timeout for total work, e.g. 30s, 5m, 5m30s.
+  # If the value is lower or equal to 0, the timeout is disabled.
+  # Default: 0 (disabled)
+  timeout: 5m
+
+  # The mode used to evaluate relative paths.
+  # It's used by exclusions, Go plugins, and some linters.
+  # The value can be:
+  # - `gomod`: the paths will be relative to the directory of the `go.mod` file.
+  # - `gitroot`: the paths will be relative to the git root (the parent directory of `.git`).
+  # - `cfg`: the paths will be relative to the configuration file.
+  # - `wd` (NOT recommended): the paths will be relative to the place where golangci-lint is run.
+  relative-path-mode: gomod
+
+  # List of build tags, all linters use it.
+  build-tags:
+    - docs
+
+severity:
+  # Set the default severity for issues.
+  #
+  # If severity rules are defined and the issues do not match or no severity is provided to the rule
+  # this will be the default severity applied.
+  # Severities should match the supported severity names of the selected out format.
+  # - Code climate: https://docs.codeclimate.com/docs/issues#issue-severity
+  # - Checkstyle: https://checkstyle.sourceforge.io/property_types.html#SeverityLevel
+  # - GitHub: https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
+  # - TeamCity: https://www.jetbrains.com/help/teamcity/service-messages.html#Inspection+Instance
+  #
+  # `@linter` can be used as severity value to keep the severity from linters (e.g. revive, gosec, ...)
+  default: error

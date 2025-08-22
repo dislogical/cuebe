@@ -11,6 +11,9 @@
     commitizen
     hawkeye
     cobra-cli
+
+    golangci-lint
+
     mkdocs
     mike
     python313Packages.mkdocs-material
