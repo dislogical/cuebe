@@ -1,7 +1,7 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-module github.com/dislogical/bonk
+module github.com/bonk-build/bonk
 
 go 1.24.5
 

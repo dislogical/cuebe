@@ -14,8 +14,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/dislogical/bonk/pkg/backend"
-	"github.com/dislogical/bonk/pkg/task"
+	"github.com/bonk-build/bonk/pkg/backend"
+	"github.com/bonk-build/bonk/pkg/task"
 )
 
 var cfgFile string

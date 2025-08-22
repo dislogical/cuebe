@@ -3,7 +3,7 @@
 
 site_name: Bonk
 site_url: https://coldencullen.com/bonk/
-repo_url: https://github.com/dislogical/bonk
+repo_url: https://github.com/bonk-build/bonk
 
 theme:
   name: material

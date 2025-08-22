@@ -18,9 +18,9 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	plugin "github.com/dislogical/bonk/api/go"
-	protov1 "github.com/dislogical/bonk/api/go/proto/bonk/v1"
-	"github.com/dislogical/bonk/pkg/task"
+	plugin "github.com/bonk-build/bonk/api/go"
+	protov1 "github.com/bonk-build/bonk/api/go/proto/bonk/v1"
+	"github.com/bonk-build/bonk/pkg/task"
 )
 
 type Backend struct {
