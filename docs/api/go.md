@@ -12,7 +12,7 @@ import "go.bonk.build/api/go"
 - [Variables](<#variables>)
 - [func Serve\(backends ...BonkBackend\)](<#Serve>)
 - [type BonkBackend](<#BonkBackend>)
-  - [func NewBackend\[Params any\]\(name string, outputs \[\]string, exec func\(TaskParams\[Params\]\) error\) BonkBackend](<#NewBackend>)
+  - [func NewBackend\[Params any\]\(name string, outputs \[\]string, exec func\(\*TaskParams\[Params\]\) error\) BonkBackend](<#NewBackend>)
 - [type TaskParams](<#TaskParams>)
 
 
@@ -43,12 +43,12 @@ var Handshake = goplugin.HandshakeConfig{
 func Serve(backends ...BonkBackend)
 ```
 
-Call from main\(\) to start the plugin gRPC server
+Call from main\(\) to start the plugin gRPC server.
 
 <a name="BonkBackend"></a>
 ## type BonkBackend
 
-Represents a backend capable of performing tasks
+Represents a backend capable of performing tasks.
 
 ```go
 type BonkBackend struct {
@@ -63,20 +63,20 @@ type BonkBackend struct {
 ### func NewBackend
 
 ```go
-func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[Params]) error) BonkBackend
+func NewBackend[Params any](name string, outputs []string, exec func(*TaskParams[Params]) error) BonkBackend
 ```
 
-Factory to create a new task backend
+Factory to create a new task backend.
 
 <a name="TaskParams"></a>
 ## type TaskParams
 
-The inputs passed to a task backend
+The inputs passed to a task backend.
 
 ```go
 type TaskParams[Params any] struct {
+    Params Params
     Inputs []string
-    Params *Params
     OutDir string
 }
 ```
