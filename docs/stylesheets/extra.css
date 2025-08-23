@@ -1,0 +1,13 @@
+/*
+ * Copyright © 2025 Colden Cullen
+ * SPDX-License-Identifier: MIT
+ */
+
+.md-header .md-logo {
+  margin: 0;
+  padding: 0;
+}
+
+.md-header .md-logo img {
+  height: 2.5rem;
+}
