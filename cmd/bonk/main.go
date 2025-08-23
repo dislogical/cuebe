@@ -16,6 +16,7 @@ import (
 	"github.com/spf13/viper"
 
 	"go.bonk.build/pkg/backend"
+	"go.bonk.build/pkg/plugin"
 	"go.bonk.build/pkg/task"
 )
 
@@ -29,14 +30,19 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cuectx := cuecontext.New()
 
-		bem := backend.BackendManager{}
+		bem := backend.NewBackendManager()
 		defer bem.Shutdown()
 
-		bem.Start(cmd.Context())
+		pum := plugin.NewPluginManager(bem)
+		defer pum.Shutdown()
+
+		for _, pluginPath := range []string{"./plugins/test", "./plugins/k8s/resources", "./plugins/k8s/kustomize"} {
+			cobra.CheckErr(pum.StartPlugin(cmd.Context(), pluginPath))
+		}
 
 		cobra.CheckErr(
 			bem.SendTask(task.New(
-				"Test",
+				"test:Test",
 				"Test.Test",
 				cuectx.CompileString(`value: 3`),
 			)),
@@ -44,7 +50,7 @@ var rootCmd = &cobra.Command{
 
 		cobra.CheckErr(
 			bem.SendTask(task.New(
-				"Resources",
+				"resources:Resources",
 				"Test.Resources",
 				cuectx.CompileString(`
 				resources: [{
@@ -58,10 +64,10 @@ var rootCmd = &cobra.Command{
 		cwd, _ := os.Getwd()
 		cobra.CheckErr(
 			bem.SendTask(task.New(
-				"Kustomize",
+				"kustomize:Kustomize",
 				"Test.Kustomize",
 				cuectx.BuildExpr(ast.NewStruct()),
-				path.Join(cwd, ".bonk/Test.Resources:Resources/resources.yaml"),
+				path.Join(cwd, ".bonk/Test.Resources:resources:Resources/resources.yaml"),
 			)),
 		)
 	},

@@ -1,12 +1,11 @@
 // Copyright © 2025 Colden Cullen
 // SPDX-License-Identifier: MIT
 
-package plugin // import "go.bonk.build/api/go"
+package bonk // import "go.bonk.build/api/go"
 
 import (
 	"context"
 	"fmt"
-	"log/slog"
 
 	"google.golang.org/grpc"
 
@@ -49,15 +48,15 @@ func NewBackend[Params any](
 		panic(schema.Err())
 	}
 
-	slog.Info("backend schema", "backend", name, "schema", schema)
-
 	return BonkBackend{
 		Name:         name,
 		Outputs:      outputs,
 		ParamsSchema: schema,
 		Exec: func(paramsCue TaskParams[cue.Value]) error {
 			params := new(TaskParams[Params])
-			err := paramsCue.Params.Decode(params.Params)
+			params.Inputs = paramsCue.Inputs
+			params.OutDir = paramsCue.OutDir
+			err := paramsCue.Params.Decode(&params.Params)
 			if err != nil {
 				return fmt.Errorf("failed to decode task parameters: %w", err)
 			}
