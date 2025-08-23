@@ -18,6 +18,7 @@ repos:
       - id: check-yaml
         args:
           - --allow-multiple-documents
+          - --unsafe
       - id: check-added-large-files
       - id: mixed-line-ending
       - id: detect-private-key
