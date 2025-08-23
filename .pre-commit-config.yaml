@@ -45,17 +45,10 @@ repos:
 
   - repo: local
     hooks:
-      - id: go-fmt
-        name: go format
+      - id: go-generate
+        name: go generate
         language: system
-        entry: go fmt ./...
-        types: [go]
-        pass_filenames: false
-      - id: go-vet
-        name: go vet
-        language: system
-        entry: go vet ./...
-        types: [go]
+        entry: go generate ./...
         pass_filenames: false
 
       - id: cue-fmt

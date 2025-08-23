@@ -3,8 +3,6 @@
 
 package plugin // import "go.bonk.build/api/go"
 
-//go:generate go tool -C ../.. buf generate
-
 import (
 	"context"
 	"fmt"
