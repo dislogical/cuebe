@@ -17,10 +17,14 @@ import (
 
 	"go.bonk.build/pkg/backend"
 	"go.bonk.build/pkg/plugin"
+	"go.bonk.build/pkg/scheduler"
 	"go.bonk.build/pkg/task"
 )
 
-var cfgFile string
+var (
+	cfgFile     string
+	concurrency uint
+)
 
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
@@ -36,39 +40,49 @@ var rootCmd = &cobra.Command{
 		pum := plugin.NewPluginManager(bem)
 		defer pum.Shutdown()
 
+		sched := scheduler.NewScheduler(bem, concurrency)
+		defer sched.Run()
+
 		for _, pluginPath := range []string{"./plugins/test", "./plugins/k8s/resources", "./plugins/k8s/kustomize"} {
 			cobra.CheckErr(pum.StartPlugin(cmd.Context(), pluginPath))
 		}
 
 		cobra.CheckErr(
-			bem.SendTask(task.New(
-				"test:Test",
-				"Test.Test",
-				cuectx.CompileString(`value: 3`),
-			)),
+			sched.AddTask(
+				task.New(
+					"test:Test",
+					"Test.Test",
+					cuectx.CompileString(`value: 3`),
+				),
+			),
 		)
 
 		cobra.CheckErr(
-			bem.SendTask(task.New(
-				"resources:Resources",
-				"Test.Resources",
-				cuectx.CompileString(`
-				resources: [{
-					apiVersion: "v1"
-					kind: "Namespace"
-					metadata: name: "Testing"
-				}]`),
-			)),
+			sched.AddTask(
+				task.New(
+					"resources:Resources",
+					"Test.Resources",
+					cuectx.CompileString(`
+					resources: [{
+						apiVersion: "v1"
+						kind: "Namespace"
+						metadata: name: "Testing"
+					}]`),
+				),
+			),
 		)
 
 		cwd, _ := os.Getwd()
 		cobra.CheckErr(
-			bem.SendTask(task.New(
-				"kustomize:Kustomize",
-				"Test.Kustomize",
-				cuectx.BuildExpr(ast.NewStruct()),
-				path.Join(cwd, ".bonk/Test.Resources:resources:Resources/resources.yaml"),
-			)),
+			sched.AddTask(
+				task.New(
+					"kustomize:Kustomize",
+					"Test.Kustomize",
+					cuectx.BuildExpr(ast.NewStruct()),
+					path.Join(cwd, ".bonk/Test.Resources:resources:Resources/resources.yaml"),
+				),
+				"Test.Resources:resources:Resources",
+			),
 		)
 	},
 }
@@ -76,6 +90,8 @@ var rootCmd = &cobra.Command{
 func init() {
 	rootCmd.PersistentFlags().
 		StringVarP(&cfgFile, "config", "c", "", "config file (default is .bonk.yaml)")
+	rootCmd.PersistentFlags().
+		UintVarP(&concurrency, "concurrency", "j", 100, "The number of goroutines to run")
 
 	if cfgFile != "" {
 		// Use config file from the flag.
