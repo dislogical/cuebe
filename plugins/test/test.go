@@ -4,8 +4,6 @@
 package main // import "go.bonk.build/plugins/test"
 
 import (
-	"log/slog"
-
 	plugin "go.bonk.build/api/go"
 )
 
@@ -19,8 +17,6 @@ func main() {
 			"Test",
 			[]string{},
 			func(param *plugin.TaskParams[Params]) error {
-				slog.Info("testing!", "param", param.Params)
-
 				return nil
 			},
 		),
