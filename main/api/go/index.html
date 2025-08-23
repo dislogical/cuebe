@@ -632,7 +632,7 @@
 <li><a href="#variables">Variables</a></li>
 <li><a href="#Serve">func Serve(backends ...BonkBackend)</a></li>
 <li><a href="#BonkBackend">type BonkBackend</a></li>
-<li><a href="#NewBackend">func NewBackend[Params any](name string, outputs []string, exec func(TaskParams[Params]) error) BonkBackend</a></li>
+<li><a href="#NewBackend">func NewBackend[Params any](name string, outputs []string, exec func(*TaskParams[Params]) error) BonkBackend</a></li>
 <li><a href="#TaskParams">type TaskParams</a></li>
 </ul>
 <h2 id="constants">Constants</h2>
@@ -651,10 +651,10 @@
 <h2 id="func-serve">func Serve</h2>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">Serve</span><span class="p">(</span><span class="nx">backends</span><span class="w"> </span><span class="o">...</span><span class="nx">BonkBackend</span><span class="p">)</span>
 </code></pre></div>
-<p>Call from main() to start the plugin gRPC server</p>
+<p>Call from main() to start the plugin gRPC server.</p>
 <p><a name="BonkBackend"></a></p>
 <h2 id="type-bonkbackend">type BonkBackend</h2>
-<p>Represents a backend capable of performing tasks</p>
+<p>Represents a backend capable of performing tasks.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">BonkBackend</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Name</span><span class="w">         </span><span class="kt">string</span>
 <span class="w">    </span><span class="nx">Outputs</span><span class="w">      </span><span class="p">[]</span><span class="kt">string</span>
@@ -664,15 +664,15 @@
 </code></pre></div>
 <p><a name="NewBackend"></a></p>
 <h3 id="func-newbackend">func NewBackend</h3>
-<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">NewBackend</span><span class="p">[</span><span class="nx">Params</span><span class="w"> </span><span class="kt">any</span><span class="p">](</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">outputs</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">exec</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">TaskParams</span><span class="p">[</span><span class="nx">Params</span><span class="p">])</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="nx">BonkBackend</span>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">NewBackend</span><span class="p">[</span><span class="nx">Params</span><span class="w"> </span><span class="kt">any</span><span class="p">](</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">outputs</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">exec</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">TaskParams</span><span class="p">[</span><span class="nx">Params</span><span class="p">])</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="nx">BonkBackend</span>
 </code></pre></div>
-<p>Factory to create a new task backend</p>
+<p>Factory to create a new task backend.</p>
 <p><a name="TaskParams"></a></p>
 <h2 id="type-taskparams">type TaskParams</h2>
-<p>The inputs passed to a task backend</p>
+<p>The inputs passed to a task backend.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">TaskParams</span><span class="p">[</span><span class="nx">Params</span><span class="w"> </span><span class="kt">any</span><span class="p">]</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Params</span><span class="w"> </span><span class="nx">Params</span>
 <span class="w">    </span><span class="nx">Inputs</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span>
-<span class="w">    </span><span class="nx">Params</span><span class="w"> </span><span class="o">*</span><span class="nx">Params</span>
 <span class="w">    </span><span class="nx">OutDir</span><span class="w"> </span><span class="kt">string</span>
 <span class="p">}</span>
 </code></pre></div>
