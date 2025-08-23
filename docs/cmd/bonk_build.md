@@ -15,7 +15,8 @@ bonk build [paths...] [flags]
 ### Options inherited from parent commands
 
 ```
-  -c, --config string   config file (default is .bonk.yaml)
+  -j, --concurrency uint   The number of goroutines to run (default 100)
+  -c, --config string      config file (default is .bonk.yaml)
 ```
 
 ### SEE ALSO
