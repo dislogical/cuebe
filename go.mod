@@ -13,6 +13,7 @@ tool (
 require (
 	cuelang.org/go v0.14.1
 	github.com/hashicorp/go-plugin v1.7.0
+	github.com/noneback/go-taskflow v1.1.3
 	github.com/pterm/pterm v0.12.81
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1

@@ -57,6 +57,10 @@ linters:
       ignored-numbers:
         - '0o600'
         - '0o750'
+      # List of file patterns to exclude from analysis.
+      # Values always ignored: `.+_test.go`.
+      ignored-files:
+        - 'cmd/bonk/.+'
 
 formatters:
   # Enable specific formatter.
