@@ -7,6 +7,37 @@ default_install_hook_types:
   - pre-push
 
 repos:
+  - repo: local
+    hooks:
+      - id: go-generate
+        name: go generate
+        language: system
+        entry: go generate ./...
+        pass_filenames: false
+
+      - id: cue-fmt
+        name: cue format
+        language: system
+        entry: cue fmt
+        types: [cue]
+      - id: cue-vet
+        name: cue vet
+        language: system
+        entry: cue vet -c
+        types: [cue, yaml]
+        pass_filenames: false
+
+      - id: buf-fmt
+        name: buf format
+        language: system
+        entry: go tool buf format
+        types: [proto]
+      - id: buf-lint
+        name: buf lint
+        language: system
+        entry: go tool buf lint
+        types: [proto]
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
@@ -51,34 +82,3 @@ repos:
       - id: golangci-lint-config-verify
       - id: golangci-lint-full
       - id: golangci-lint-fmt
-
-  - repo: local
-    hooks:
-      - id: go-generate
-        name: go generate
-        language: system
-        entry: go generate ./...
-        pass_filenames: false
-
-      - id: cue-fmt
-        name: cue format
-        language: system
-        entry: cue fmt
-        types: [cue]
-      - id: cue-vet
-        name: cue vet
-        language: system
-        entry: cue vet -c
-        types: [cue, yaml]
-        pass_filenames: false
-
-      - id: buf-fmt
-        name: buf format
-        language: system
-        entry: go tool buf format
-        types: [proto]
-      - id: buf-lint
-        name: buf lint
-        language: system
-        entry: go tool buf lint
-        types: [proto]
