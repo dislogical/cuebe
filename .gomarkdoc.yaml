@@ -5,5 +5,5 @@ format: github
 output: ./docs/api/go.md
 package: go.bonk.build/api/go
 repository:
-  url: github.com/bonk-build/bonk
+  url: https://github.com/bonk-build/bonk
   defaultBranch: main
