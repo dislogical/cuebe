@@ -43,7 +43,13 @@ var rootCmd = &cobra.Command{
 		sched := scheduler.NewScheduler(bem, concurrency)
 		defer sched.Run()
 
-		for _, pluginPath := range []string{"./plugins/test", "./plugins/k8s/resources", "./plugins/k8s/kustomize"} {
+		plugins := []string{
+			"go.bonk.build/plugins/test",
+			"go.bonk.build/plugins/k8s/resources",
+			"go.bonk.build/plugins/k8s/kustomize",
+		}
+
+		for _, pluginPath := range plugins {
 			cobra.CheckErr(pum.StartPlugin(cmd.Context(), pluginPath))
 		}
 

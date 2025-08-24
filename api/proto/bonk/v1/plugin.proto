@@ -22,7 +22,7 @@ message PerformTaskRequest {
   string backend = 1;
 
   repeated string inputs = 2;
-  google.protobuf.Value parameters = 3;
+  google.protobuf.Struct parameters = 3;
   string out_directory = 4;
 }
 

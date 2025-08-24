@@ -125,7 +125,7 @@ type PerformTaskRequest struct {
 	state                   protoimpl.MessageState `protogen:"opaque.v1"`
 	xxx_hidden_Backend      *string                `protobuf:"bytes,1,opt,name=backend"`
 	xxx_hidden_Inputs       []string               `protobuf:"bytes,2,rep,name=inputs"`
-	xxx_hidden_Parameters   *structpb.Value        `protobuf:"bytes,3,opt,name=parameters"`
+	xxx_hidden_Parameters   *structpb.Struct       `protobuf:"bytes,3,opt,name=parameters"`
 	xxx_hidden_OutDirectory *string                `protobuf:"bytes,4,opt,name=out_directory,json=outDirectory"`
 	XXX_raceDetectHookData  protoimpl.RaceDetectHookData
 	XXX_presence            [1]uint32
@@ -175,7 +175,7 @@ func (x *PerformTaskRequest) GetInputs() []string {
 	return nil
 }
 
-func (x *PerformTaskRequest) GetParameters() *structpb.Value {
+func (x *PerformTaskRequest) GetParameters() *structpb.Struct {
 	if x != nil {
 		return x.xxx_hidden_Parameters
 	}
@@ -201,7 +201,7 @@ func (x *PerformTaskRequest) SetInputs(v []string) {
 	x.xxx_hidden_Inputs = v
 }
 
-func (x *PerformTaskRequest) SetParameters(v *structpb.Value) {
+func (x *PerformTaskRequest) SetParameters(v *structpb.Struct) {
 	x.xxx_hidden_Parameters = v
 }
 
@@ -250,7 +250,7 @@ type PerformTaskRequest_builder struct {
 
 	Backend      *string
 	Inputs       []string
-	Parameters   *structpb.Value
+	Parameters   *structpb.Struct
 	OutDirectory *string
 }
 
@@ -383,12 +383,12 @@ const file_bonk_v1_plugin_proto_rawDesc = "" +
 	"\aoutputs\x18\x01 \x03(\tR\aoutputs\x1ap\n" +
 	"\rBackendsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12I\n" +
-	"\x05value\x18\x02 \x01(\v23.bonk.v1.ConfigurePluginResponse.BackendDescriptionR\x05value:\x028\x01\"\xa3\x01\n" +
+	"\x05value\x18\x02 \x01(\v23.bonk.v1.ConfigurePluginResponse.BackendDescriptionR\x05value:\x028\x01\"\xa4\x01\n" +
 	"\x12PerformTaskRequest\x12\x18\n" +
 	"\abackend\x18\x01 \x01(\tR\abackend\x12\x16\n" +
-	"\x06inputs\x18\x02 \x03(\tR\x06inputs\x126\n" +
+	"\x06inputs\x18\x02 \x03(\tR\x06inputs\x127\n" +
 	"\n" +
-	"parameters\x18\x03 \x01(\v2\x16.google.protobuf.ValueR\n" +
+	"parameters\x18\x03 \x01(\v2\x17.google.protobuf.StructR\n" +
 	"parameters\x12#\n" +
 	"\rout_directory\x18\x04 \x01(\tR\foutDirectory\"\x15\n" +
 	"\x13PerformTaskResponse2\xb3\x01\n" +
@@ -404,12 +404,12 @@ var file_bonk_v1_plugin_proto_goTypes = []any{
 	(*PerformTaskRequest)(nil),                         // 2: bonk.v1.PerformTaskRequest
 	(*PerformTaskResponse)(nil),                        // 3: bonk.v1.PerformTaskResponse
 	(*ConfigurePluginResponse_BackendDescription)(nil), // 4: bonk.v1.ConfigurePluginResponse.BackendDescription
-	nil,                    // 5: bonk.v1.ConfigurePluginResponse.BackendsEntry
-	(*structpb.Value)(nil), // 6: google.protobuf.Value
+	nil,                     // 5: bonk.v1.ConfigurePluginResponse.BackendsEntry
+	(*structpb.Struct)(nil), // 6: google.protobuf.Struct
 }
 var file_bonk_v1_plugin_proto_depIdxs = []int32{
 	5, // 0: bonk.v1.ConfigurePluginResponse.backends:type_name -> bonk.v1.ConfigurePluginResponse.BackendsEntry
-	6, // 1: bonk.v1.PerformTaskRequest.parameters:type_name -> google.protobuf.Value
+	6, // 1: bonk.v1.PerformTaskRequest.parameters:type_name -> google.protobuf.Struct
 	4, // 2: bonk.v1.ConfigurePluginResponse.BackendsEntry.value:type_name -> bonk.v1.ConfigurePluginResponse.BackendDescription
 	0, // 3: bonk.v1.BonkPluginService.ConfigurePlugin:input_type -> bonk.v1.ConfigurePluginRequest
 	2, // 4: bonk.v1.BonkPluginService.PerformTask:input_type -> bonk.v1.PerformTaskRequest

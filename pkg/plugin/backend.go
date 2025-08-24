@@ -10,7 +10,6 @@ import (
 	"google.golang.org/protobuf/types/known/structpb"
 
 	"cuelang.org/go/cue"
-	"cuelang.org/go/encoding/gocode/gocodec"
 
 	protov1 "go.bonk.build/api/go/proto/bonk/v1"
 	"go.bonk.build/pkg/task"
@@ -20,11 +19,10 @@ type PluginBackend struct {
 	plugin     *Plugin
 	name       string
 	descriptor *protov1.ConfigurePluginResponse_BackendDescription
-	outputs    []string
 }
 
 func (pb *PluginBackend) Outputs() []string {
-	return pb.outputs
+	return pb.descriptor.GetOutputs()
 }
 
 func (pb *PluginBackend) Execute(ctx context.Context, cuectx *cue.Context, tsk task.Task) error {
@@ -32,12 +30,11 @@ func (pb *PluginBackend) Execute(ctx context.Context, cuectx *cue.Context, tsk t
 	taskReqBuilder := protov1.PerformTaskRequest_builder{
 		Backend:      &pb.name,
 		Inputs:       tsk.Inputs,
-		Parameters:   &structpb.Value{},
+		Parameters:   &structpb.Struct{},
 		OutDirectory: &outDir,
 	}
 
-	codec := gocodec.New(cuectx, &gocodec.Config{})
-	err := codec.Encode(tsk.Params, taskReqBuilder.Parameters)
+	err := tsk.Params.Decode(taskReqBuilder.Parameters)
 	if err != nil {
 		return fmt.Errorf("failed to encode parameters as protobuf: %w", err)
 	}

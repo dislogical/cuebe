@@ -44,7 +44,6 @@ func NewPlugin(ctx context.Context, client protov1.BonkPluginServiceClient) (*Pl
 			name:       name,
 			plugin:     plugin,
 			descriptor: backendDesc,
-			outputs:    backendDesc.GetOutputs(),
 		}
 	}
 
