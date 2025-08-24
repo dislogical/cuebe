@@ -26,5 +26,6 @@ var docsCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(docsCmd)
+	rootCmd.DisableAutoGenTag = true
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 }
