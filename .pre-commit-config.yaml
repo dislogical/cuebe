@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 default_install_hook_types:
+  - commit-msg
   - pre-commit
   - pre-push
 
@@ -40,9 +41,9 @@ repos:
       - id: commitizen
 
   - repo: https://github.com/korandoru/hawkeye
-    rev: v6.1.1
+    rev: 77c2515a10d0133ea938118da962a2a2572cbf08
     hooks:
-      - id: hawkeye-format
+      - id: hawkeye-format-docker
 
   - repo: https://github.com/golangci/golangci-lint
     rev: v2.4.0
