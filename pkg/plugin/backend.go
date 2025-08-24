@@ -30,7 +30,7 @@ func (pb *PluginBackend) Execute(ctx context.Context, cuectx *cue.Context, tsk t
 	taskReqBuilder := protov1.PerformTaskRequest_builder{
 		Backend:      &pb.name,
 		Inputs:       tsk.Inputs,
-		Parameters:   &structpb.Value{},
+		Parameters:   &structpb.Struct{},
 		OutDirectory: &outDir,
 	}
 
