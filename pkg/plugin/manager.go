@@ -17,13 +17,18 @@ import (
 	"go.bonk.build/pkg/backend"
 )
 
+type BackendRegistrar interface {
+	RegisterBackend(name string, impl backend.Backend) error
+	UnregisterBackend(name string)
+}
+
 type PluginManager struct {
 	plugins map[string]*Plugin
 
-	backend *backend.BackendManager
+	backend BackendRegistrar
 }
 
-func NewPluginManager(backend *backend.BackendManager) *PluginManager {
+func NewPluginManager(backend BackendRegistrar) *PluginManager {
 	pm := &PluginManager{}
 	pm.plugins = make(map[string]*Plugin)
 	pm.backend = backend

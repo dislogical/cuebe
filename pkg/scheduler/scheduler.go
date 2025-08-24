@@ -9,18 +9,21 @@ import (
 
 	gotaskflow "github.com/noneback/go-taskflow"
 
-	"go.bonk.build/pkg/backend"
 	"go.bonk.build/pkg/task"
 )
 
+type TaskSender interface {
+	SendTask(tsk task.Task) error
+}
+
 type Scheduler struct {
-	backendManager *backend.BackendManager
+	backendManager TaskSender
 	executor       gotaskflow.Executor
 	tasks          map[string]*gotaskflow.Task
 	rootFlow       *gotaskflow.TaskFlow
 }
 
-func NewScheduler(backendManager *backend.BackendManager, concurrency uint) *Scheduler {
+func NewScheduler(backendManager TaskSender, concurrency uint) *Scheduler {
 	return &Scheduler{
 		backendManager: backendManager,
 		executor:       gotaskflow.NewExecutor(concurrency),
