@@ -13,7 +13,7 @@ import (
 	goplugin "github.com/hashicorp/go-plugin"
 
 	plugin "go.bonk.build/api/go"
-	protov1 "go.bonk.build/api/go/proto/bonk/v1"
+	bonkv0 "go.bonk.build/api/go/proto/bonk/v0"
 	"go.bonk.build/pkg/backend"
 )
 
@@ -61,7 +61,7 @@ func (pm *PluginManager) StartPlugin(ctx context.Context, pluginPath string) err
 		return fmt.Errorf("failed to dispense bonk plugin: %w", err)
 	}
 
-	bonkClient, ok := pluginClient.(protov1.BonkPluginServiceClient)
+	bonkClient, ok := pluginClient.(bonkv0.BonkPluginServiceClient)
 	if !ok {
 		return errors.New("got unexpected plugin client type")
 	}

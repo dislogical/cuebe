@@ -30,14 +30,14 @@ const PluginType = "bonk"
 
 ```go
 var Handshake = goplugin.HandshakeConfig{
-    ProtocolVersion:  1,
+    ProtocolVersion:  0,
     MagicCookieKey:   "BONK_PLUGIN",
     MagicCookieValue: "backend",
 }
 ```
 
 <a name="Serve"></a>
-## func [Serve](<https://github.com/bonk-build/bonk/blob/2eff2e3/api/go/plugin.go#L70>)
+## func [Serve](<https://github.com/bonk-build/bonk/blob/110fbfd/api/go/plugin.go#L70>)
 
 ```go
 func Serve(backends ...BonkBackend)
@@ -46,7 +46,7 @@ func Serve(backends ...BonkBackend)
 Call from main\(\) to start the plugin gRPC server.
 
 <a name="BonkBackend"></a>
-## type [BonkBackend](<https://github.com/bonk-build/bonk/blob/2eff2e3/api/go/plugin.go#L31-L36>)
+## type [BonkBackend](<https://github.com/bonk-build/bonk/blob/110fbfd/api/go/plugin.go#L31-L36>)
 
 Represents a backend capable of performing tasks.
 
@@ -60,7 +60,7 @@ type BonkBackend struct {
 ```
 
 <a name="NewBackend"></a>
-### func [NewBackend](<https://github.com/bonk-build/bonk/blob/2eff2e3/api/go/plugin.go#L39-L43>)
+### func [NewBackend](<https://github.com/bonk-build/bonk/blob/110fbfd/api/go/plugin.go#L39-L43>)
 
 ```go
 func NewBackend[Params any](name string, outputs []string, exec func(*TaskParams[Params]) error) BonkBackend
@@ -69,7 +69,7 @@ func NewBackend[Params any](name string, outputs []string, exec func(*TaskParams
 Factory to create a new task backend.
 
 <a name="TaskParams"></a>
-## type [TaskParams](<https://github.com/bonk-build/bonk/blob/2eff2e3/api/go/plugin.go#L24-L28>)
+## type [TaskParams](<https://github.com/bonk-build/bonk/blob/110fbfd/api/go/plugin.go#L24-L28>)
 
 The inputs passed to a task backend.
 

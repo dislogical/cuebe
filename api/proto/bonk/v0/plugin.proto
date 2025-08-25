@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 edition = "2023";
-package bonk.v1;
+package bonk.v0;
 
 import "google/protobuf/struct.proto";
 

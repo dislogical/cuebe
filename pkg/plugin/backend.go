@@ -11,14 +11,14 @@ import (
 
 	"cuelang.org/go/cue"
 
-	protov1 "go.bonk.build/api/go/proto/bonk/v1"
+	bonkv0 "go.bonk.build/api/go/proto/bonk/v0"
 	"go.bonk.build/pkg/task"
 )
 
 type PluginBackend struct {
 	plugin     *Plugin
 	name       string
-	descriptor *protov1.ConfigurePluginResponse_BackendDescription
+	descriptor *bonkv0.ConfigurePluginResponse_BackendDescription
 }
 
 func (pb *PluginBackend) Outputs() []string {
@@ -27,7 +27,7 @@ func (pb *PluginBackend) Outputs() []string {
 
 func (pb *PluginBackend) Execute(ctx context.Context, cuectx *cue.Context, tsk task.Task) error {
 	outDir := tsk.GetOutputDirectory()
-	taskReqBuilder := protov1.PerformTaskRequest_builder{
+	taskReqBuilder := bonkv0.PerformTaskRequest_builder{
 		Backend:      &pb.name,
 		Inputs:       tsk.Inputs,
 		Parameters:   &structpb.Struct{},

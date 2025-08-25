@@ -15,7 +15,7 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	protov1 "go.bonk.build/api/go/proto/bonk/v1"
+	bonkv0 "go.bonk.build/api/go/proto/bonk/v0"
 )
 
 var cuectx = cuecontext.New()
@@ -85,7 +85,7 @@ func Serve(backends ...BonkBackend) {
 }
 
 var Handshake = goplugin.HandshakeConfig{
-	ProtocolVersion:  1,
+	ProtocolVersion:  0,
 	MagicCookieKey:   "BONK_PLUGIN",
 	MagicCookieValue: "backend",
 }
@@ -102,7 +102,7 @@ type bonkPluginServer struct {
 }
 
 func (p *bonkPluginServer) GRPCServer(_ *goplugin.GRPCBroker, s *grpc.Server) error {
-	protov1.RegisterBonkPluginServiceServer(s, &grpcServer{
+	bonkv0.RegisterBonkPluginServiceServer(s, &grpcServer{
 		decodeCodec: gocodec.New(cuectx, &gocodec.Config{}),
 		backends:    p.backends,
 	})
@@ -112,7 +112,7 @@ func (p *bonkPluginServer) GRPCServer(_ *goplugin.GRPCBroker, s *grpc.Server) er
 
 // Here is the gRPC server that GRPCClient talks to.
 type grpcServer struct {
-	protov1.UnimplementedBonkPluginServiceServer
+	bonkv0.UnimplementedBonkPluginServiceServer
 
 	decodeCodec *gocodec.Codec
 	backends    map[string]BonkBackend
@@ -120,14 +120,14 @@ type grpcServer struct {
 
 func (s *grpcServer) ConfigurePlugin(
 	ctx context.Context,
-	req *protov1.ConfigurePluginRequest,
-) (*protov1.ConfigurePluginResponse, error) {
-	respBuilder := protov1.ConfigurePluginResponse_builder{
-		Backends: make(map[string]*protov1.ConfigurePluginResponse_BackendDescription, len(s.backends)),
+	req *bonkv0.ConfigurePluginRequest,
+) (*bonkv0.ConfigurePluginResponse, error) {
+	respBuilder := bonkv0.ConfigurePluginResponse_builder{
+		Backends: make(map[string]*bonkv0.ConfigurePluginResponse_BackendDescription, len(s.backends)),
 	}
 
 	for name, backend := range s.backends {
-		respBuilder.Backends[name] = protov1.ConfigurePluginResponse_BackendDescription_builder{
+		respBuilder.Backends[name] = bonkv0.ConfigurePluginResponse_BackendDescription_builder{
 			Outputs: backend.Outputs,
 		}.Build()
 	}
@@ -137,8 +137,8 @@ func (s *grpcServer) ConfigurePlugin(
 
 func (s *grpcServer) PerformTask(
 	ctx context.Context,
-	req *protov1.PerformTaskRequest,
-) (*protov1.PerformTaskResponse, error) {
+	req *bonkv0.PerformTaskRequest,
+) (*bonkv0.PerformTaskResponse, error) {
 	backend, ok := s.backends[req.GetBackend()]
 	if !ok {
 		return nil, fmt.Errorf("backend %s is not registered to this plugin", req.GetBackend())
@@ -169,5 +169,5 @@ func (s *grpcServer) PerformTask(
 		return nil, err
 	}
 
-	return protov1.PerformTaskResponse_builder{}.Build(), nil
+	return bonkv0.PerformTaskResponse_builder{}.Build(), nil
 }
