@@ -642,18 +642,18 @@
 <h2 id="variables">Variables</h2>
 <p><a name="Handshake"></a></p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">Handshake</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">goplugin</span><span class="p">.</span><span class="nx">HandshakeConfig</span><span class="p">{</span>
-<span class="w">    </span><span class="nx">ProtocolVersion</span><span class="p">:</span><span class="w">  </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">ProtocolVersion</span><span class="p">:</span><span class="w">  </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">MagicCookieKey</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;BONK_PLUGIN&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">MagicCookieValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;backend&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 </code></pre></div>
 <p><a name="Serve"></a></p>
-<h2 id="func-serve">func <a href="https://github.com/bonk-build/bonk/blob/2eff2e3/api/go/plugin.go#L70">Serve</a></h2>
+<h2 id="func-serve">func <a href="https://github.com/bonk-build/bonk/blob/fec31f4/api/go/plugin.go#L70">Serve</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">Serve</span><span class="p">(</span><span class="nx">backends</span><span class="w"> </span><span class="o">...</span><span class="nx">BonkBackend</span><span class="p">)</span>
 </code></pre></div>
 <p>Call from main() to start the plugin gRPC server.</p>
 <p><a name="BonkBackend"></a></p>
-<h2 id="type-bonkbackend">type <a href="https://github.com/bonk-build/bonk/blob/2eff2e3/api/go/plugin.go#L31-L36">BonkBackend</a></h2>
+<h2 id="type-bonkbackend">type <a href="https://github.com/bonk-build/bonk/blob/fec31f4/api/go/plugin.go#L31-L36">BonkBackend</a></h2>
 <p>Represents a backend capable of performing tasks.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">BonkBackend</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Name</span><span class="w">         </span><span class="kt">string</span>
@@ -663,12 +663,12 @@
 <span class="p">}</span>
 </code></pre></div>
 <p><a name="NewBackend"></a></p>
-<h3 id="func-newbackend">func <a href="https://github.com/bonk-build/bonk/blob/2eff2e3/api/go/plugin.go#L39-L43">NewBackend</a></h3>
+<h3 id="func-newbackend">func <a href="https://github.com/bonk-build/bonk/blob/fec31f4/api/go/plugin.go#L39-L43">NewBackend</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">NewBackend</span><span class="p">[</span><span class="nx">Params</span><span class="w"> </span><span class="kt">any</span><span class="p">](</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">outputs</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">exec</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">TaskParams</span><span class="p">[</span><span class="nx">Params</span><span class="p">])</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="nx">BonkBackend</span>
 </code></pre></div>
 <p>Factory to create a new task backend.</p>
 <p><a name="TaskParams"></a></p>
-<h2 id="type-taskparams">type <a href="https://github.com/bonk-build/bonk/blob/2eff2e3/api/go/plugin.go#L24-L28">TaskParams</a></h2>
+<h2 id="type-taskparams">type <a href="https://github.com/bonk-build/bonk/blob/fec31f4/api/go/plugin.go#L24-L28">TaskParams</a></h2>
 <p>The inputs passed to a task backend.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">TaskParams</span><span class="p">[</span><span class="nx">Params</span><span class="w"> </span><span class="kt">any</span><span class="p">]</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Params</span><span class="w"> </span><span class="nx">Params</span>
