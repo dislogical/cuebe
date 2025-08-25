@@ -6,12 +6,15 @@ package bonk // import "go.bonk.build/api/go"
 import (
 	"context"
 	"fmt"
+	"log/slog"
 
 	"google.golang.org/grpc"
 
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/cuecontext"
 	"cuelang.org/go/encoding/gocode/gocodec"
+
+	"github.com/ValerySidorin/shclog"
 
 	goplugin "github.com/hashicorp/go-plugin"
 
@@ -81,6 +84,7 @@ func Serve(backends ...BonkBackend) {
 			},
 		},
 		GRPCServer: goplugin.DefaultGRPCServer,
+		Logger:     shclog.New(slog.Default()),
 	})
 }
 
