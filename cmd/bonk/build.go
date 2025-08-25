@@ -22,8 +22,8 @@ var buildCmd = &cobra.Command{
 	Args:       cobra.ArbitraryArgs,
 	ArgAliases: []string{"paths"},
 
-	Run: func(_ *cobra.Command, args []string) {
-		slog.Info("Perforing Build")
+	Run: func(cmd *cobra.Command, args []string) {
+		slog.InfoContext(cmd.Context(), "perforing build")
 
 		config := load.Config{}
 
@@ -31,14 +31,14 @@ var buildCmd = &cobra.Command{
 		if len(args) > 0 {
 			config.Dir = args[0]
 			args[0] = "."
-			slog.Debug("Using arg[0] as Dir", "dir", config.Dir)
+			slog.DebugContext(cmd.Context(), "using arg[0] as Dir", "dir", config.Dir)
 		}
 
 		cuectx := cuecontext.New()
 		insts := load.Instances(args, &config)
 		values, err := cuectx.BuildInstances(insts)
 		if err != nil {
-			slog.Error("Failed to build bonk project", "error", err.Error())
+			slog.ErrorContext(cmd.Context(), "failed to build bonk project", "error", err.Error())
 		}
 
 		// Unify all of the values into a single source of truth
@@ -50,7 +50,7 @@ var buildCmd = &cobra.Command{
 		holos := value.LookupPath(cue.MakePath(cue.Str("holos")))
 
 		source := holos.Pos()
-		slog.Debug("Source", "source", source.String())
+		slog.DebugContext(cmd.Context(), "source", "source", source.String())
 
 		syn := holos.Syntax(
 			cue.Final(),
@@ -62,9 +62,9 @@ var buildCmd = &cobra.Command{
 			format.Simplify(),
 		)
 		if err != nil {
-			slog.Error("Failed to encode value", "error", err.Error())
+			slog.ErrorContext(cmd.Context(), "failed to encode value", "error", err.Error())
 		}
-		slog.Info(string(str))
+		slog.InfoContext(cmd.Context(), string(str))
 	},
 }
 
