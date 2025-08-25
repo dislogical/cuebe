@@ -12,6 +12,7 @@
     hawkeye
     cobra-cli
 
+    buf
     golangci-lint
 
     mkdocs

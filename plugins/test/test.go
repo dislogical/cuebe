@@ -4,6 +4,8 @@
 package main // import "go.bonk.build/plugins/test"
 
 import (
+	"log/slog"
+
 	plugin "go.bonk.build/api/go"
 )
 
@@ -16,7 +18,9 @@ func main() {
 		plugin.NewBackend(
 			"Test",
 			[]string{},
-			func(param *plugin.TaskParams[Params]) error {
+			func(log *slog.Logger, param *plugin.TaskParams[Params]) error {
+				log.Info("it's happening!")
+
 				return nil
 			},
 		),

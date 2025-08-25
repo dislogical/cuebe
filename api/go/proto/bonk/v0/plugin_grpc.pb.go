@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	BonkPluginService_ConfigurePlugin_FullMethodName = "/bonk.v0.BonkPluginService/ConfigurePlugin"
+	BonkPluginService_StreamLogs_FullMethodName      = "/bonk.v0.BonkPluginService/StreamLogs"
 	BonkPluginService_PerformTask_FullMethodName     = "/bonk.v0.BonkPluginService/PerformTask"
 )
 
@@ -27,7 +28,10 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BonkPluginServiceClient interface {
+	// General plugin support
 	ConfigurePlugin(ctx context.Context, in *ConfigurePluginRequest, opts ...grpc.CallOption) (*ConfigurePluginResponse, error)
+	StreamLogs(ctx context.Context, in *StreamLogsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StreamLogsResponse], error)
+	// Backend interface
 	PerformTask(ctx context.Context, in *PerformTaskRequest, opts ...grpc.CallOption) (*PerformTaskResponse, error)
 }
 
@@ -49,6 +53,25 @@ func (c *bonkPluginServiceClient) ConfigurePlugin(ctx context.Context, in *Confi
 	return out, nil
 }
 
+func (c *bonkPluginServiceClient) StreamLogs(ctx context.Context, in *StreamLogsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StreamLogsResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &BonkPluginService_ServiceDesc.Streams[0], BonkPluginService_StreamLogs_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[StreamLogsRequest, StreamLogsResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type BonkPluginService_StreamLogsClient = grpc.ServerStreamingClient[StreamLogsResponse]
+
 func (c *bonkPluginServiceClient) PerformTask(ctx context.Context, in *PerformTaskRequest, opts ...grpc.CallOption) (*PerformTaskResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PerformTaskResponse)
@@ -63,7 +86,10 @@ func (c *bonkPluginServiceClient) PerformTask(ctx context.Context, in *PerformTa
 // All implementations must embed UnimplementedBonkPluginServiceServer
 // for forward compatibility.
 type BonkPluginServiceServer interface {
+	// General plugin support
 	ConfigurePlugin(context.Context, *ConfigurePluginRequest) (*ConfigurePluginResponse, error)
+	StreamLogs(*StreamLogsRequest, grpc.ServerStreamingServer[StreamLogsResponse]) error
+	// Backend interface
 	PerformTask(context.Context, *PerformTaskRequest) (*PerformTaskResponse, error)
 	mustEmbedUnimplementedBonkPluginServiceServer()
 }
@@ -77,6 +103,9 @@ type UnimplementedBonkPluginServiceServer struct{}
 
 func (UnimplementedBonkPluginServiceServer) ConfigurePlugin(context.Context, *ConfigurePluginRequest) (*ConfigurePluginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConfigurePlugin not implemented")
+}
+func (UnimplementedBonkPluginServiceServer) StreamLogs(*StreamLogsRequest, grpc.ServerStreamingServer[StreamLogsResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method StreamLogs not implemented")
 }
 func (UnimplementedBonkPluginServiceServer) PerformTask(context.Context, *PerformTaskRequest) (*PerformTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PerformTask not implemented")
@@ -120,6 +149,17 @@ func _BonkPluginService_ConfigurePlugin_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BonkPluginService_StreamLogs_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(StreamLogsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(BonkPluginServiceServer).StreamLogs(m, &grpc.GenericServerStream[StreamLogsRequest, StreamLogsResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type BonkPluginService_StreamLogsServer = grpc.ServerStreamingServer[StreamLogsResponse]
+
 func _BonkPluginService_PerformTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PerformTaskRequest)
 	if err := dec(in); err != nil {
@@ -154,6 +194,12 @@ var BonkPluginService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BonkPluginService_PerformTask_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "StreamLogs",
+			Handler:       _BonkPluginService_StreamLogs_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "bonk/v0/plugin.proto",
 }

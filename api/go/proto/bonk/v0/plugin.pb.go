@@ -10,6 +10,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	unsafe "unsafe"
 )
@@ -20,6 +21,47 @@ const (
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
+
+type ConfigurePluginResponse_FeatureFlags int32
+
+const (
+	ConfigurePluginResponse_FEATURE_FLAGS_UNSPECIFIED       ConfigurePluginResponse_FeatureFlags = 0
+	ConfigurePluginResponse_FEATURE_FLAGS_STREAMING_LOGGING ConfigurePluginResponse_FeatureFlags = 1
+)
+
+// Enum value maps for ConfigurePluginResponse_FeatureFlags.
+var (
+	ConfigurePluginResponse_FeatureFlags_name = map[int32]string{
+		0: "FEATURE_FLAGS_UNSPECIFIED",
+		1: "FEATURE_FLAGS_STREAMING_LOGGING",
+	}
+	ConfigurePluginResponse_FeatureFlags_value = map[string]int32{
+		"FEATURE_FLAGS_UNSPECIFIED":       0,
+		"FEATURE_FLAGS_STREAMING_LOGGING": 1,
+	}
+)
+
+func (x ConfigurePluginResponse_FeatureFlags) Enum() *ConfigurePluginResponse_FeatureFlags {
+	p := new(ConfigurePluginResponse_FeatureFlags)
+	*p = x
+	return p
+}
+
+func (x ConfigurePluginResponse_FeatureFlags) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ConfigurePluginResponse_FeatureFlags) Descriptor() protoreflect.EnumDescriptor {
+	return file_bonk_v0_plugin_proto_enumTypes[0].Descriptor()
+}
+
+func (ConfigurePluginResponse_FeatureFlags) Type() protoreflect.EnumType {
+	return &file_bonk_v0_plugin_proto_enumTypes[0]
+}
+
+func (x ConfigurePluginResponse_FeatureFlags) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
 
 type ConfigurePluginRequest struct {
 	state         protoimpl.MessageState `protogen:"opaque.v1"`
@@ -66,7 +108,8 @@ func (b0 ConfigurePluginRequest_builder) Build() *ConfigurePluginRequest {
 
 type ConfigurePluginResponse struct {
 	state               protoimpl.MessageState                                 `protogen:"opaque.v1"`
-	xxx_hidden_Backends map[string]*ConfigurePluginResponse_BackendDescription `protobuf:"bytes,1,rep,name=backends" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	xxx_hidden_Features []ConfigurePluginResponse_FeatureFlags                 `protobuf:"varint,1,rep,packed,name=features,enum=bonk.v0.ConfigurePluginResponse_FeatureFlags"`
+	xxx_hidden_Backends map[string]*ConfigurePluginResponse_BackendDescription `protobuf:"bytes,3,rep,name=backends" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -96,11 +139,22 @@ func (x *ConfigurePluginResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
+func (x *ConfigurePluginResponse) GetFeatures() []ConfigurePluginResponse_FeatureFlags {
+	if x != nil {
+		return x.xxx_hidden_Features
+	}
+	return nil
+}
+
 func (x *ConfigurePluginResponse) GetBackends() map[string]*ConfigurePluginResponse_BackendDescription {
 	if x != nil {
 		return x.xxx_hidden_Backends
 	}
 	return nil
+}
+
+func (x *ConfigurePluginResponse) SetFeatures(v []ConfigurePluginResponse_FeatureFlags) {
+	x.xxx_hidden_Features = v
 }
 
 func (x *ConfigurePluginResponse) SetBackends(v map[string]*ConfigurePluginResponse_BackendDescription) {
@@ -110,6 +164,7 @@ func (x *ConfigurePluginResponse) SetBackends(v map[string]*ConfigurePluginRespo
 type ConfigurePluginResponse_builder struct {
 	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
 
+	Features []ConfigurePluginResponse_FeatureFlags
 	Backends map[string]*ConfigurePluginResponse_BackendDescription
 }
 
@@ -117,7 +172,261 @@ func (b0 ConfigurePluginResponse_builder) Build() *ConfigurePluginResponse {
 	m0 := &ConfigurePluginResponse{}
 	b, x := &b0, m0
 	_, _ = b, x
+	x.xxx_hidden_Features = b.Features
 	x.xxx_hidden_Backends = b.Backends
+	return m0
+}
+
+type StreamLogsRequest struct {
+	state                  protoimpl.MessageState `protogen:"opaque.v1"`
+	xxx_hidden_Level       int32                  `protobuf:"varint,1,opt,name=level"`
+	xxx_hidden_AddSource   bool                   `protobuf:"varint,2,opt,name=add_source,json=addSource"`
+	XXX_raceDetectHookData protoimpl.RaceDetectHookData
+	XXX_presence           [1]uint32
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *StreamLogsRequest) Reset() {
+	*x = StreamLogsRequest{}
+	mi := &file_bonk_v0_plugin_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StreamLogsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StreamLogsRequest) ProtoMessage() {}
+
+func (x *StreamLogsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_bonk_v0_plugin_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *StreamLogsRequest) GetLevel() int32 {
+	if x != nil {
+		return x.xxx_hidden_Level
+	}
+	return 0
+}
+
+func (x *StreamLogsRequest) GetAddSource() bool {
+	if x != nil {
+		return x.xxx_hidden_AddSource
+	}
+	return false
+}
+
+func (x *StreamLogsRequest) SetLevel(v int32) {
+	x.xxx_hidden_Level = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 0, 2)
+}
+
+func (x *StreamLogsRequest) SetAddSource(v bool) {
+	x.xxx_hidden_AddSource = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 2)
+}
+
+func (x *StreamLogsRequest) HasLevel() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 0)
+}
+
+func (x *StreamLogsRequest) HasAddSource() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
+}
+
+func (x *StreamLogsRequest) ClearLevel() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 0)
+	x.xxx_hidden_Level = 0
+}
+
+func (x *StreamLogsRequest) ClearAddSource() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
+	x.xxx_hidden_AddSource = false
+}
+
+type StreamLogsRequest_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	Level     *int32
+	AddSource *bool
+}
+
+func (b0 StreamLogsRequest_builder) Build() *StreamLogsRequest {
+	m0 := &StreamLogsRequest{}
+	b, x := &b0, m0
+	_, _ = b, x
+	if b.Level != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 0, 2)
+		x.xxx_hidden_Level = *b.Level
+	}
+	if b.AddSource != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 2)
+		x.xxx_hidden_AddSource = *b.AddSource
+	}
+	return m0
+}
+
+// This is meant to mirror [slog.Record](https://pkg.go.dev/log/slog#Record)
+type StreamLogsResponse struct {
+	state                  protoimpl.MessageState     `protogen:"opaque.v1"`
+	xxx_hidden_Time        *timestamppb.Timestamp     `protobuf:"bytes,1,opt,name=time"`
+	xxx_hidden_Message     *string                    `protobuf:"bytes,2,opt,name=message"`
+	xxx_hidden_Level       int32                      `protobuf:"varint,3,opt,name=level"`
+	xxx_hidden_Attrs       map[string]*structpb.Value `protobuf:"bytes,4,rep,name=attrs" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	XXX_raceDetectHookData protoimpl.RaceDetectHookData
+	XXX_presence           [1]uint32
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *StreamLogsResponse) Reset() {
+	*x = StreamLogsResponse{}
+	mi := &file_bonk_v0_plugin_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StreamLogsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StreamLogsResponse) ProtoMessage() {}
+
+func (x *StreamLogsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_bonk_v0_plugin_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+func (x *StreamLogsResponse) GetTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.xxx_hidden_Time
+	}
+	return nil
+}
+
+func (x *StreamLogsResponse) GetMessage() string {
+	if x != nil {
+		if x.xxx_hidden_Message != nil {
+			return *x.xxx_hidden_Message
+		}
+		return ""
+	}
+	return ""
+}
+
+func (x *StreamLogsResponse) GetLevel() int32 {
+	if x != nil {
+		return x.xxx_hidden_Level
+	}
+	return 0
+}
+
+func (x *StreamLogsResponse) GetAttrs() map[string]*structpb.Value {
+	if x != nil {
+		return x.xxx_hidden_Attrs
+	}
+	return nil
+}
+
+func (x *StreamLogsResponse) SetTime(v *timestamppb.Timestamp) {
+	x.xxx_hidden_Time = v
+}
+
+func (x *StreamLogsResponse) SetMessage(v string) {
+	x.xxx_hidden_Message = &v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 1, 4)
+}
+
+func (x *StreamLogsResponse) SetLevel(v int32) {
+	x.xxx_hidden_Level = v
+	protoimpl.X.SetPresent(&(x.XXX_presence[0]), 2, 4)
+}
+
+func (x *StreamLogsResponse) SetAttrs(v map[string]*structpb.Value) {
+	x.xxx_hidden_Attrs = v
+}
+
+func (x *StreamLogsResponse) HasTime() bool {
+	if x == nil {
+		return false
+	}
+	return x.xxx_hidden_Time != nil
+}
+
+func (x *StreamLogsResponse) HasMessage() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 1)
+}
+
+func (x *StreamLogsResponse) HasLevel() bool {
+	if x == nil {
+		return false
+	}
+	return protoimpl.X.Present(&(x.XXX_presence[0]), 2)
+}
+
+func (x *StreamLogsResponse) ClearTime() {
+	x.xxx_hidden_Time = nil
+}
+
+func (x *StreamLogsResponse) ClearMessage() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 1)
+	x.xxx_hidden_Message = nil
+}
+
+func (x *StreamLogsResponse) ClearLevel() {
+	protoimpl.X.ClearPresent(&(x.XXX_presence[0]), 2)
+	x.xxx_hidden_Level = 0
+}
+
+type StreamLogsResponse_builder struct {
+	_ [0]func() // Prevents comparability and use of unkeyed literals for the builder.
+
+	Time    *timestamppb.Timestamp
+	Message *string
+	Level   *int32
+	Attrs   map[string]*structpb.Value
+}
+
+func (b0 StreamLogsResponse_builder) Build() *StreamLogsResponse {
+	m0 := &StreamLogsResponse{}
+	b, x := &b0, m0
+	_, _ = b, x
+	x.xxx_hidden_Time = b.Time
+	if b.Message != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 1, 4)
+		x.xxx_hidden_Message = b.Message
+	}
+	if b.Level != nil {
+		protoimpl.X.SetPresentNonAtomic(&(x.XXX_presence[0]), 2, 4)
+		x.xxx_hidden_Level = *b.Level
+	}
+	x.xxx_hidden_Attrs = b.Attrs
 	return m0
 }
 
@@ -135,7 +444,7 @@ type PerformTaskRequest struct {
 
 func (x *PerformTaskRequest) Reset() {
 	*x = PerformTaskRequest{}
-	mi := &file_bonk_v0_plugin_proto_msgTypes[2]
+	mi := &file_bonk_v0_plugin_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -147,7 +456,7 @@ func (x *PerformTaskRequest) String() string {
 func (*PerformTaskRequest) ProtoMessage() {}
 
 func (x *PerformTaskRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_bonk_v0_plugin_proto_msgTypes[2]
+	mi := &file_bonk_v0_plugin_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -279,7 +588,7 @@ type PerformTaskResponse struct {
 
 func (x *PerformTaskResponse) Reset() {
 	*x = PerformTaskResponse{}
-	mi := &file_bonk_v0_plugin_proto_msgTypes[3]
+	mi := &file_bonk_v0_plugin_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -291,7 +600,7 @@ func (x *PerformTaskResponse) String() string {
 func (*PerformTaskResponse) ProtoMessage() {}
 
 func (x *PerformTaskResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_bonk_v0_plugin_proto_msgTypes[3]
+	mi := &file_bonk_v0_plugin_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -323,7 +632,7 @@ type ConfigurePluginResponse_BackendDescription struct {
 
 func (x *ConfigurePluginResponse_BackendDescription) Reset() {
 	*x = ConfigurePluginResponse_BackendDescription{}
-	mi := &file_bonk_v0_plugin_proto_msgTypes[4]
+	mi := &file_bonk_v0_plugin_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -335,7 +644,7 @@ func (x *ConfigurePluginResponse_BackendDescription) String() string {
 func (*ConfigurePluginResponse_BackendDescription) ProtoMessage() {}
 
 func (x *ConfigurePluginResponse_BackendDescription) ProtoReflect() protoreflect.Message {
-	mi := &file_bonk_v0_plugin_proto_msgTypes[4]
+	mi := &file_bonk_v0_plugin_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -375,15 +684,32 @@ var File_bonk_v0_plugin_proto protoreflect.FileDescriptor
 
 const file_bonk_v0_plugin_proto_rawDesc = "" +
 	"\n" +
-	"\x14bonk/v0/plugin.proto\x12\abonk.v0\x1a\x1cgoogle/protobuf/struct.proto\"\x18\n" +
-	"\x16ConfigurePluginRequest\"\x87\x02\n" +
-	"\x17ConfigurePluginResponse\x12J\n" +
-	"\bbackends\x18\x01 \x03(\v2..bonk.v0.ConfigurePluginResponse.BackendsEntryR\bbackends\x1a.\n" +
+	"\x14bonk/v0/plugin.proto\x12\abonk.v0\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x18\n" +
+	"\x16ConfigurePluginRequest\"\xb7\x03\n" +
+	"\x17ConfigurePluginResponse\x12I\n" +
+	"\bfeatures\x18\x01 \x03(\x0e2-.bonk.v0.ConfigurePluginResponse.FeatureFlagsR\bfeatures\x12J\n" +
+	"\bbackends\x18\x03 \x03(\v2..bonk.v0.ConfigurePluginResponse.BackendsEntryR\bbackends\x1a.\n" +
 	"\x12BackendDescription\x12\x18\n" +
 	"\aoutputs\x18\x01 \x03(\tR\aoutputs\x1ap\n" +
 	"\rBackendsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12I\n" +
-	"\x05value\x18\x02 \x01(\v23.bonk.v0.ConfigurePluginResponse.BackendDescriptionR\x05value:\x028\x01\"\xa4\x01\n" +
+	"\x05value\x18\x02 \x01(\v23.bonk.v0.ConfigurePluginResponse.BackendDescriptionR\x05value:\x028\x01\"R\n" +
+	"\fFeatureFlags\x12\x1d\n" +
+	"\x19FEATURE_FLAGS_UNSPECIFIED\x10\x00\x12#\n" +
+	"\x1fFEATURE_FLAGS_STREAMING_LOGGING\x10\x01J\x04\b\x02\x10\x03R\tfrontends\"H\n" +
+	"\x11StreamLogsRequest\x12\x14\n" +
+	"\x05level\x18\x01 \x01(\x05R\x05level\x12\x1d\n" +
+	"\n" +
+	"add_source\x18\x02 \x01(\bR\taddSource\"\x84\x02\n" +
+	"\x12StreamLogsResponse\x12.\n" +
+	"\x04time\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x04time\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x14\n" +
+	"\x05level\x18\x03 \x01(\x05R\x05level\x12<\n" +
+	"\x05attrs\x18\x04 \x03(\v2&.bonk.v0.StreamLogsResponse.AttrsEntryR\x05attrs\x1aP\n" +
+	"\n" +
+	"AttrsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12,\n" +
+	"\x05value\x18\x02 \x01(\v2\x16.google.protobuf.ValueR\x05value:\x028\x01\"\xa4\x01\n" +
 	"\x12PerformTaskRequest\x12\x18\n" +
 	"\abackend\x18\x01 \x01(\tR\abackend\x12\x16\n" +
 	"\x06inputs\x18\x02 \x03(\tR\x06inputs\x127\n" +
@@ -391,35 +717,50 @@ const file_bonk_v0_plugin_proto_rawDesc = "" +
 	"parameters\x18\x03 \x01(\v2\x17.google.protobuf.StructR\n" +
 	"parameters\x12#\n" +
 	"\rout_directory\x18\x04 \x01(\tR\foutDirectory\"\x15\n" +
-	"\x13PerformTaskResponse2\xb3\x01\n" +
+	"\x13PerformTaskResponse2\xfc\x01\n" +
 	"\x11BonkPluginService\x12T\n" +
-	"\x0fConfigurePlugin\x12\x1f.bonk.v0.ConfigurePluginRequest\x1a .bonk.v0.ConfigurePluginResponse\x12H\n" +
+	"\x0fConfigurePlugin\x12\x1f.bonk.v0.ConfigurePluginRequest\x1a .bonk.v0.ConfigurePluginResponse\x12G\n" +
+	"\n" +
+	"StreamLogs\x12\x1a.bonk.v0.StreamLogsRequest\x1a\x1b.bonk.v0.StreamLogsResponse0\x01\x12H\n" +
 	"\vPerformTask\x12\x1b.bonk.v0.PerformTaskRequest\x1a\x1c.bonk.v0.PerformTaskResponseB\x80\x01\n" +
 	"\vcom.bonk.v0B\vPluginProtoP\x01Z\"go.bonk.build/api/go/proto/bonk/v0\xa2\x02\x03BVX\xaa\x02\aBonk.V0\xca\x02\aBonk\\V0\xe2\x02\x13Bonk\\V0\\GPBMetadata\xea\x02\bBonk::V0\x92\x03\x02\b\x01b\beditionsp\xe8\a"
 
-var file_bonk_v0_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_bonk_v0_plugin_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_bonk_v0_plugin_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_bonk_v0_plugin_proto_goTypes = []any{
-	(*ConfigurePluginRequest)(nil),                     // 0: bonk.v0.ConfigurePluginRequest
-	(*ConfigurePluginResponse)(nil),                    // 1: bonk.v0.ConfigurePluginResponse
-	(*PerformTaskRequest)(nil),                         // 2: bonk.v0.PerformTaskRequest
-	(*PerformTaskResponse)(nil),                        // 3: bonk.v0.PerformTaskResponse
-	(*ConfigurePluginResponse_BackendDescription)(nil), // 4: bonk.v0.ConfigurePluginResponse.BackendDescription
-	nil,                     // 5: bonk.v0.ConfigurePluginResponse.BackendsEntry
-	(*structpb.Struct)(nil), // 6: google.protobuf.Struct
+	(ConfigurePluginResponse_FeatureFlags)(0),          // 0: bonk.v0.ConfigurePluginResponse.FeatureFlags
+	(*ConfigurePluginRequest)(nil),                     // 1: bonk.v0.ConfigurePluginRequest
+	(*ConfigurePluginResponse)(nil),                    // 2: bonk.v0.ConfigurePluginResponse
+	(*StreamLogsRequest)(nil),                          // 3: bonk.v0.StreamLogsRequest
+	(*StreamLogsResponse)(nil),                         // 4: bonk.v0.StreamLogsResponse
+	(*PerformTaskRequest)(nil),                         // 5: bonk.v0.PerformTaskRequest
+	(*PerformTaskResponse)(nil),                        // 6: bonk.v0.PerformTaskResponse
+	(*ConfigurePluginResponse_BackendDescription)(nil), // 7: bonk.v0.ConfigurePluginResponse.BackendDescription
+	nil,                           // 8: bonk.v0.ConfigurePluginResponse.BackendsEntry
+	nil,                           // 9: bonk.v0.StreamLogsResponse.AttrsEntry
+	(*timestamppb.Timestamp)(nil), // 10: google.protobuf.Timestamp
+	(*structpb.Struct)(nil),       // 11: google.protobuf.Struct
+	(*structpb.Value)(nil),        // 12: google.protobuf.Value
 }
 var file_bonk_v0_plugin_proto_depIdxs = []int32{
-	5, // 0: bonk.v0.ConfigurePluginResponse.backends:type_name -> bonk.v0.ConfigurePluginResponse.BackendsEntry
-	6, // 1: bonk.v0.PerformTaskRequest.parameters:type_name -> google.protobuf.Struct
-	4, // 2: bonk.v0.ConfigurePluginResponse.BackendsEntry.value:type_name -> bonk.v0.ConfigurePluginResponse.BackendDescription
-	0, // 3: bonk.v0.BonkPluginService.ConfigurePlugin:input_type -> bonk.v0.ConfigurePluginRequest
-	2, // 4: bonk.v0.BonkPluginService.PerformTask:input_type -> bonk.v0.PerformTaskRequest
-	1, // 5: bonk.v0.BonkPluginService.ConfigurePlugin:output_type -> bonk.v0.ConfigurePluginResponse
-	3, // 6: bonk.v0.BonkPluginService.PerformTask:output_type -> bonk.v0.PerformTaskResponse
-	5, // [5:7] is the sub-list for method output_type
-	3, // [3:5] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	0,  // 0: bonk.v0.ConfigurePluginResponse.features:type_name -> bonk.v0.ConfigurePluginResponse.FeatureFlags
+	8,  // 1: bonk.v0.ConfigurePluginResponse.backends:type_name -> bonk.v0.ConfigurePluginResponse.BackendsEntry
+	10, // 2: bonk.v0.StreamLogsResponse.time:type_name -> google.protobuf.Timestamp
+	9,  // 3: bonk.v0.StreamLogsResponse.attrs:type_name -> bonk.v0.StreamLogsResponse.AttrsEntry
+	11, // 4: bonk.v0.PerformTaskRequest.parameters:type_name -> google.protobuf.Struct
+	7,  // 5: bonk.v0.ConfigurePluginResponse.BackendsEntry.value:type_name -> bonk.v0.ConfigurePluginResponse.BackendDescription
+	12, // 6: bonk.v0.StreamLogsResponse.AttrsEntry.value:type_name -> google.protobuf.Value
+	1,  // 7: bonk.v0.BonkPluginService.ConfigurePlugin:input_type -> bonk.v0.ConfigurePluginRequest
+	3,  // 8: bonk.v0.BonkPluginService.StreamLogs:input_type -> bonk.v0.StreamLogsRequest
+	5,  // 9: bonk.v0.BonkPluginService.PerformTask:input_type -> bonk.v0.PerformTaskRequest
+	2,  // 10: bonk.v0.BonkPluginService.ConfigurePlugin:output_type -> bonk.v0.ConfigurePluginResponse
+	4,  // 11: bonk.v0.BonkPluginService.StreamLogs:output_type -> bonk.v0.StreamLogsResponse
+	6,  // 12: bonk.v0.BonkPluginService.PerformTask:output_type -> bonk.v0.PerformTaskResponse
+	10, // [10:13] is the sub-list for method output_type
+	7,  // [7:10] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_bonk_v0_plugin_proto_init() }
@@ -432,13 +773,14 @@ func file_bonk_v0_plugin_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_bonk_v0_plugin_proto_rawDesc), len(file_bonk_v0_plugin_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   6,
+			NumEnums:      1,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_bonk_v0_plugin_proto_goTypes,
 		DependencyIndexes: file_bonk_v0_plugin_proto_depIdxs,
+		EnumInfos:         file_bonk_v0_plugin_proto_enumTypes,
 		MessageInfos:      file_bonk_v0_plugin_proto_msgTypes,
 	}.Build()
 	File_bonk_v0_plugin_proto = out.File

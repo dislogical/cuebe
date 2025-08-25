@@ -35,14 +35,14 @@ type BonkBackend struct {
 	Name         string
 	Outputs      []string
 	ParamsSchema cue.Value
-	Exec         func(TaskParams[cue.Value]) error
+	Exec         func(*slog.Logger, TaskParams[cue.Value]) error
 }
 
 // Factory to create a new task backend.
 func NewBackend[Params any](
 	name string,
 	outputs []string,
-	exec func(*TaskParams[Params]) error,
+	exec func(*slog.Logger, *TaskParams[Params]) error,
 ) BonkBackend {
 	zero := new(Params)
 
@@ -55,7 +55,7 @@ func NewBackend[Params any](
 		Name:         name,
 		Outputs:      outputs,
 		ParamsSchema: schema,
-		Exec: func(paramsCue TaskParams[cue.Value]) error {
+		Exec: func(logger *slog.Logger, paramsCue TaskParams[cue.Value]) error {
 			params := new(TaskParams[Params])
 			params.Inputs = paramsCue.Inputs
 			params.OutDir = paramsCue.OutDir
@@ -64,7 +64,7 @@ func NewBackend[Params any](
 				return fmt.Errorf("failed to decode task parameters: %w", err)
 			}
 
-			return exec(params)
+			return exec(logger, params)
 		},
 	}
 }
@@ -127,6 +127,9 @@ func (s *grpcServer) ConfigurePlugin(
 	req *bonkv0.ConfigurePluginRequest,
 ) (*bonkv0.ConfigurePluginResponse, error) {
 	respBuilder := bonkv0.ConfigurePluginResponse_builder{
+		Features: []bonkv0.ConfigurePluginResponse_FeatureFlags{
+			bonkv0.ConfigurePluginResponse_FEATURE_FLAGS_STREAMING_LOGGING,
+		},
 		Backends: make(map[string]*bonkv0.ConfigurePluginResponse_BackendDescription, len(s.backends)),
 	}
 
@@ -168,7 +171,7 @@ func (s *grpcServer) PerformTask(
 		return nil, fmt.Errorf("failed to decode parameters: %w", err)
 	}
 
-	err = backend.Exec(params)
+	err = backend.Exec(slog.Default().With("source", "task"), params)
 	if err != nil {
 		return nil, err
 	}

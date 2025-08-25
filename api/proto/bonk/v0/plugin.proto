@@ -5,17 +5,41 @@ edition = "2023";
 package bonk.v0;
 
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 
 option features.field_presence = EXPLICIT;
 
 message ConfigurePluginRequest {}
 
 message ConfigurePluginResponse {
+  enum FeatureFlags {
+    FEATURE_FLAGS_UNSPECIFIED = 0;
+    FEATURE_FLAGS_STREAMING_LOGGING = 1;
+  }
+
   message BackendDescription {
     repeated string outputs = 1;
   }
 
-  map<string, BackendDescription> backends = 1;
+  // Prep for front end support
+  reserved 2;
+  reserved frontends;
+
+  repeated FeatureFlags features = 1;
+  map<string, BackendDescription> backends = 3;
+}
+
+message StreamLogsRequest {
+  int32 level = 1;
+  bool add_source = 2;
+}
+
+// This is meant to mirror [slog.Record](https://pkg.go.dev/log/slog#Record)
+message StreamLogsResponse {
+  google.protobuf.Timestamp time = 1;
+  string message = 2;
+  int32 level = 3;
+  map<string, google.protobuf.Value> attrs = 4;
 }
 
 message PerformTaskRequest {
@@ -29,7 +53,10 @@ message PerformTaskRequest {
 message PerformTaskResponse {}
 
 service BonkPluginService {
+  // General plugin support
   rpc ConfigurePlugin(ConfigurePluginRequest) returns (ConfigurePluginResponse);
+  rpc StreamLogs(StreamLogsRequest) returns (stream StreamLogsResponse);
 
+  // Backend interface
   rpc PerformTask(PerformTaskRequest) returns (PerformTaskResponse);
 }
