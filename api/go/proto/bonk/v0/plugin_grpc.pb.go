@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: bonk/v1/plugin.proto
+// source: bonk/v0/plugin.proto
 
-package bonkv1
+package v0
 
 import (
 	context "context"
@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	BonkPluginService_ConfigurePlugin_FullMethodName = "/bonk.v1.BonkPluginService/ConfigurePlugin"
-	BonkPluginService_PerformTask_FullMethodName     = "/bonk.v1.BonkPluginService/PerformTask"
+	BonkPluginService_ConfigurePlugin_FullMethodName = "/bonk.v0.BonkPluginService/ConfigurePlugin"
+	BonkPluginService_PerformTask_FullMethodName     = "/bonk.v0.BonkPluginService/PerformTask"
 )
 
 // BonkPluginServiceClient is the client API for BonkPluginService service.
@@ -142,7 +142,7 @@ func _BonkPluginService_PerformTask_Handler(srv interface{}, ctx context.Context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var BonkPluginService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "bonk.v1.BonkPluginService",
+	ServiceName: "bonk.v0.BonkPluginService",
 	HandlerType: (*BonkPluginServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -155,5 +155,5 @@ var BonkPluginService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "bonk/v1/plugin.proto",
+	Metadata: "bonk/v0/plugin.proto",
 }

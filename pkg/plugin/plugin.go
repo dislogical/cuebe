@@ -13,17 +13,17 @@ import (
 
 	goplugin "github.com/hashicorp/go-plugin"
 
-	protov1 "go.bonk.build/api/go/proto/bonk/v1"
+	bonkv0 "go.bonk.build/api/go/proto/bonk/v0"
 )
 
 type Plugin struct {
-	client   protov1.BonkPluginServiceClient
+	client   bonkv0.BonkPluginServiceClient
 	backends map[string]PluginBackend
 }
 
-func NewPlugin(ctx context.Context, client protov1.BonkPluginServiceClient) (*Plugin, error) {
+func NewPlugin(ctx context.Context, client bonkv0.BonkPluginServiceClient) (*Plugin, error) {
 	configureCtx, cancel := context.WithTimeout(ctx, 1*time.Second)
-	resp, err := client.ConfigurePlugin(configureCtx, &protov1.ConfigurePluginRequest{})
+	resp, err := client.ConfigurePlugin(configureCtx, &bonkv0.ConfigurePluginRequest{})
 	cancel()
 	if err != nil {
 		return nil, fmt.Errorf("failed to describe plugin: %w", err)
@@ -62,5 +62,5 @@ func (p *bonkPluginClient) GRPCClient(
 	_ *goplugin.GRPCBroker,
 	c *grpc.ClientConn,
 ) (any, error) {
-	return protov1.NewBonkPluginServiceClient(c), nil
+	return bonkv0.NewBonkPluginServiceClient(c), nil
 }

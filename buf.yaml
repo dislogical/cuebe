@@ -9,6 +9,9 @@ modules:
 lint:
   use:
     - STANDARD
+  except:
+    # TODO: Remove after version v1
+    - PACKAGE_VERSION_SUFFIX
 breaking:
   use:
     - FILE
