@@ -2,13 +2,13 @@
 # Copyright © 2025 Colden Cullen
 # SPDX-License-Identifier: MIT
 
-SRCPATH="${1:-.}"
+declare -a SRCPATHS=(
+  "api/go"
+)
 
-TAG=$(git tag --points-at HEAD)
+for SRCPATH in "${SRCPATHS[@]}"; do
+  # If there is no tag, use the short commit
+  TAG=${1:-$(git rev-parse --short $(git rev-list -1 HEAD -- $SRCPATH))}
 
-# If there is no tag, use the short commit
-if [ -z "$TAG" ]; then
-  TAG=$(git rev-parse --short $(git rev-list -1 HEAD -- $SRCPATH))
-fi
-
-go tool gomarkdoc go.bonk.build/$SRCPATH --repository.default-branch=$TAG
+  go tool gomarkdoc go.bonk.build/$SRCPATH --repository.default-branch=$TAG
+done
