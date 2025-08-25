@@ -1,6 +1,10 @@
 # Copyright © 2025 Colden Cullen
 # SPDX-License-Identifier: MIT
 
+default_stages:
+  - pre-commit
+  - pre-push
+
 default_install_hook_types:
   - commit-msg
   - pre-commit
@@ -70,6 +74,9 @@ repos:
     rev: v4.8.3
     hooks:
       - id: commitizen
+        stages:
+          - commit-msg
+          - manual
 
   - repo: https://github.com/korandoru/hawkeye
     rev: 77c2515a10d0133ea938118da962a2a2572cbf08
