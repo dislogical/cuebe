@@ -37,7 +37,7 @@ func NewPlugin(ctx context.Context, client bonkv0.BonkPluginServiceClient) (*Plu
 	for name, backendDesc := range resp.GetBackends() {
 		_, existed := plugin.backends[name]
 		if existed {
-			slog.Warn("duplicate backend detected", "name", name)
+			slog.WarnContext(ctx, "duplicate backend detected", "name", name)
 		}
 
 		plugin.backends[name] = PluginBackend{

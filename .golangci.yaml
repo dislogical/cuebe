@@ -62,6 +62,23 @@ linters:
       ignored-files:
         - 'cmd/bonk/.+'
 
+    sloglint:
+      # Enforce using methods that accept a context.
+      # Values:
+      # - "": disabled
+      # - "all": report all contextless calls
+      # - "scope": report only if a context exists in the scope of the outermost function
+      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#context-only
+      context: scope
+      # Enforce message style.
+      # Values: lowercased, capitalized
+      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#message-style
+      msg-style: lowercased
+      # Enforce key naming convention.
+      # Values: snake, kebab, camel, pascal
+      # https://github.com/go-simpler/sloglint?tab=readme-ov-file#key-naming-convention
+      key-naming-case: kebab
+
 formatters:
   # Enable specific formatter.
   enable:
