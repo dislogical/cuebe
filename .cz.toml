@@ -9,6 +9,10 @@ update_changelog_on_bump = true
 
 major_version_zero = true
 
+pre_bump_hooks = [
+  "scripts/release_docs.sh"
+]
+
 name = "cz_conventional_commits"
 change_type_order = [
   "Features",
