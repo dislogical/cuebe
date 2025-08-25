@@ -7,8 +7,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 	"os/exec"
 	"path"
+
+	"github.com/ValerySidorin/shclog"
 
 	goplugin "github.com/hashicorp/go-plugin"
 
@@ -49,6 +52,7 @@ func (pm *PluginManager) StartPlugin(ctx context.Context, pluginPath string) err
 		AllowedProtocols: []goplugin.Protocol{
 			goplugin.ProtocolGRPC,
 		},
+		Logger: shclog.New(slog.Default()),
 	})
 
 	rpcClient, err := process.Client()
