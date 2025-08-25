@@ -71,7 +71,7 @@ func NewBackend[Params any](
 
 // Call from main() to start the plugin gRPC server.
 func Serve(backends ...BonkBackend) {
-	backendMap := make(map[string]BonkBackend)
+	backendMap := make(map[string]BonkBackend, len(backends))
 	for _, backend := range backends {
 		backendMap[backend.Name] = backend
 	}
